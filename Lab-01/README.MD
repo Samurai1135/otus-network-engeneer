@@ -29,7 +29,7 @@
 
 ### Пример конфигурации маршрутизатора/роутера Router1
 
-`
+~~
 !
 version 15.4
 service timestamps debug datetime msec
@@ -152,4 +152,4 @@ line vty 0 4
 !
 !
 end
-`
+~~
