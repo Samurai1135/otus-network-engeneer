@@ -30,34 +30,9 @@
 - #### Пример конфигурации маршрутизатора/роутера [Router1](https://github.com/Samurai1135/otus-network-engeneer/blob/5d99e9ae3b454713c38ee46384ad0a144e1dccd8/Lab-01/Configs/R1):
 
 ~~~
-!
-version 15.4
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
+conf t
 !
 hostname Router
-!
-boot-start-marker
-boot-end-marker
-!
-no aaa new-model
-mmi polling-interval 60
-no mmi auto-configure
-no mmi pvc
-mmi snmp-timeout 180
-!
-ip cef
-no ipv6 cef
-!
-multilink bundle-name authenticated
-!
-redundancy
-!
-interface Ethernet0/0
- no shutdown
- no ip address
- shutdown
 !
 interface Ethernet0/1
  no shutdown
@@ -73,60 +48,13 @@ interface Ethernet0/1.30
  encapsulation dot1Q 30
  ip address 192.168.30.254 255.255.255.0
 !
-interface Ethernet0/2
- no shutdown
- no ip address
- shutdown
-!
-interface Ethernet0/3
- no shutdown
- no ip address
- shutdown
-!
-ip forward-protocol nd
-!
-no ip http server
-no ip http secure-server
-!
-control-plane
-!
-line con 0
- logging synchronous
-line aux 0
-line vty 0 4
- login
- transport input none
-!
-end
 ~~~
-
-
 - #### Пример конфигурации коммутатора/свича [Switch2](https://github.com/Samurai1135/otus-network-engeneer/blob/0e32d26be229c73e5e031ce8d3db0a6f552e44bc/Lab-01/Configs/SW2):
 ~~~
 
-!
-! Last configuration change at 09:42:02 UTC Fri Apr 7 2023
-!
-version 15.2
-service timestamps debug datetime msec
-service timestamps log datetime msec
-no service password-encryption
-service compress-config
+conf t
 !
 hostname Switch2
-!
-boot-start-marker
-boot-end-marker
-!
-no aaa new-model
-!
-ip cef
-no ipv6 cef
-!
-spanning-tree mode rapid-pvst
-spanning-tree extend system-id
-!
-vlan internal allocation policy ascending
 !
 interface Ethernet0/0
  no shutdown
@@ -150,18 +78,4 @@ interface Ethernet0/3
  switchport access vlan 20
  switchport mode access
 !
-ip forward-protocol nd
-!
-no ip http server
-no ip http secure-server
-!
-control-plane
-!
-line con 0
- logging synchronous
-line aux 0
-line vty 0 4
- login
-!
-end
 ~~~
