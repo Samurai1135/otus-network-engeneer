@@ -32,7 +32,7 @@
 ~~~
 conf t
 !
-hostname Router
+hostname Router1
 !
 interface Ethernet0/1
  no shutdown
