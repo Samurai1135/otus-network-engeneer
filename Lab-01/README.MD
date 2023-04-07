@@ -27,7 +27,7 @@
 
 
 
-- ### Пример конфигурации маршрутизатора/роутера [Router1](https://github.com/Samurai1135/otus-network-engeneer/blob/5d99e9ae3b454713c38ee46384ad0a144e1dccd8/Lab-01/Configs/R1)
+- ### Пример конфигурации маршрутизатора/роутера [Router1](https://github.com/Samurai1135/otus-network-engeneer/blob/5d99e9ae3b454713c38ee46384ad0a144e1dccd8/Lab-01/Configs/R1):
 
 ~~~
 !
