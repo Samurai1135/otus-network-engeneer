@@ -24,3 +24,132 @@
 |Пользовательский ПК5| VPC5                 |  eth0 -- IP:192.168.30.2/24         |
 |Пользовательский ПК6| VPC6                 |  eth0 -- IP:192.168.20.3/24         | 
 |Пользовательский ПК7| VPC7                 |  eth0 -- IP:192.168.30.3/24         |
+
+
+
+### Пример конфигурации маршрутизатора/роутера Router1
+
+`
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/1.20
+ no shutdown
+ encapsulation dot1Q 20
+ ip address 192.168.20.254 255.255.255.0
+!
+interface Ethernet0/1.30
+ no shutdown
+ encapsulation dot1Q 30
+ ip address 192.168.30.254 255.255.255.0
+!
+interface Ethernet0/1.254
+ no shutdown
+ description ManagementVLAN-254
+ encapsulation dot1Q 254
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+`
