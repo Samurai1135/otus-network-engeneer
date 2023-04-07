@@ -1,0 +1,21 @@
+Conf t
+!
+interface Ethernet0/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/1.20
+ no shutdown
+ encapsulation dot1Q 20
+ ip address 192.168.20.254 255.255.255.0
+!
+interface Ethernet0/1.30
+ no shutdown
+ encapsulation dot1Q 30
+ ip address 192.168.30.254 255.255.255.0
+!
