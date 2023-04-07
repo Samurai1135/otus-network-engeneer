@@ -118,39 +118,15 @@ hostname Switch2
 boot-start-marker
 boot-end-marker
 !
-!
-!
 no aaa new-model
-!
-!
-!
-!
-!
-!
-!
 !
 ip cef
 no ipv6 cef
-!
-!
 !
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
-!
-! 
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface Ethernet0/0
  no shutdown
@@ -179,20 +155,13 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
-!
-!
-!
-!
-!
 control-plane
-!
 !
 line con 0
  logging synchronous
 line aux 0
 line vty 0 4
  login
-!
 !
 end
 ~~~
