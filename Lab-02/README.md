@@ -43,7 +43,7 @@
 <br>
 
 #### Параметры сетевых устройств 
-Пример конфигурации маршрутизатора [Router-1](https://github.com/Samurai1135/otus-network-engeneer/blob/4e1c5e6eeeb28e85e584e8798aa26700819cb008/Lab-02/Configs/Router-1):
+> Пример конфигурации маршрутизатора [Router-1](https://github.com/Samurai1135/otus-network-engeneer/blob/4e1c5e6eeeb28e85e584e8798aa26700819cb008/Lab-02/Configs/Router-1):
 ~~~
 interface Ethernet0/0
  no shutdown
@@ -96,7 +96,7 @@ line vty 0 4
 end
 ~~~
 
-Пример конфигурации коммутатора [Switch-4](https://github.com/Samurai1135/otus-network-engeneer/blob/5e792fcf66594cdf07a56e5f768891060c2ee396/Lab-02/Configs/SW4):
+> Пример конфигурации коммутатора [Switch-4](https://github.com/Samurai1135/otus-network-engeneer/blob/5e792fcf66594cdf07a56e5f768891060c2ee396/Lab-02/Configs/SW4):
 
 ~~~
 Last configuration change at 12:58:52 UTC Tue Apr 11 2023
