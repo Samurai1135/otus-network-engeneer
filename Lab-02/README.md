@@ -46,7 +46,7 @@
 <br>
 <br>
 
-~~~
+~~~~
 interface Ethernet0/0
  no shutdown
  no ip address
