@@ -42,7 +42,7 @@
 
 <br>
 #### Параметры сетевых устройств 
-Пример конфигурации маршрутизатора ![Router-1](https://github.com/Samurai1135/otus-network-engeneer/blob/4e1c5e6eeeb28e85e584e8798aa26700819cb008/Lab-02/Configs/Router-1)
+Пример конфигурации маршрутизатора [Router-1](https://github.com/Samurai1135/otus-network-engeneer/blob/4e1c5e6eeeb28e85e584e8798aa26700819cb008/Lab-02/Configs/Router-1)
 <br>
 <br>
 
