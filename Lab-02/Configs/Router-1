@@ -1,20 +1,17 @@
-
-version 15.4\
-service timestamps debug datetime msec\
-service timestamps log datetime msec\
-no service password-encryption\
-!\
-hostname Router-1\
-!\
-boot-start-marker\
-boot-end-marker\
-!\
-!\
-!\
-no aaa new-model\
-mmi polling-interval 60\
-no mmi auto-configure\
-no mmi pvc\
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router-1
+!
+boot-start-marker
+boot-end-marker
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
 mmi snmp-timeout 180
 !
 ip cef
