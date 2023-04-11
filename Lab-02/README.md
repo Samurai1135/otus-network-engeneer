@@ -18,3 +18,7 @@
 - ## Часть 1. Топология сети и основные параметры сетевых устройств
 
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/e9c80de0cbc62366fff3cf5a6a07605fa480f33a/Lab-02/NetworkScheme/Topology.png)
+<br>
+
+-#### Используемые ноды
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/1f4a71b173f5d96cc348817ba9e537efc5f6fa77/Lab-02/NetworkScheme/%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D1%83%D0%B5%D0%BC%D1%8B%D0%B5%20%D0%BD%D0%BE%D0%B4%D1%8B.png)
