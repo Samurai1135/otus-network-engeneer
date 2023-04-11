@@ -176,3 +176,7 @@ line vty 0 4
 end
 }
 ~~~
+
+- ## Часть 2. Определение коммутатора в качестве корневого моста (Root Bridge)
+
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/d6ef12e2c6245cc9231450ca6808c0cbafcabfeb/Lab-02/NetworkScheme/Lab-02.png)
