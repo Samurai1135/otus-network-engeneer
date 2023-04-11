@@ -97,12 +97,13 @@ line vty 0 4
 !
 end
 ~~~
+
 <br>
 Пример конфигурации коммутатора [Switch-4](https://github.com/Samurai1135/otus-network-engeneer/blob/5e792fcf66594cdf07a56e5f768891060c2ee396/Lab-02/Configs/SW4)
 <br>
+
 ~~~
-!
-! Last configuration change at 12:58:52 UTC Tue Apr 11 2023
+Last configuration change at 12:58:52 UTC Tue Apr 11 2023
 !
 version 15.2
 service timestamps debug datetime msec
