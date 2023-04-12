@@ -1,6 +1,6 @@
-       
+
 !
-! Last configuration change at 20:49:10 UTC Tue Apr 11 2023
+! Last configuration change at 09:40:35 UTC Wed Apr 12 2023
 !
 version 15.2
 service timestamps debug datetime msec
@@ -8,12 +8,13 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname Switch-2
+hostname S2
 !
 boot-start-marker
 boot-end-marker
 !
 !
+enable password cisco
 !
 no aaa new-model
 !
@@ -24,6 +25,7 @@ no aaa new-model
 !
 !
 !
+no ip domain-lookup
 ip cef
 no ipv6 cef
 !
@@ -99,14 +101,14 @@ no ip http secure-server
 !
 control-plane
 !
+banner motd ATTENTION!!! Password needed!
 !
 line con 0
  logging synchronous
 line aux 0
 line vty 0 4
+ password cisco
  login
 !
 !
 end
-
-    
