@@ -180,7 +180,8 @@ line vty 0 4
 > Пример конфигурации коммутатора [Switch-4](https://github.com/Samurai1135/otus-network-engeneer/blob/5e792fcf66594cdf07a56e5f768891060c2ee396/Lab-02/Configs/SW4):
 
 ~~~
-Last configuration change at 12:58:52 UTC Tue Apr 11 2023
+!
+! Last configuration change at 09:39:21 UTC Wed Apr 12 2023
 !
 version 15.2
 service timestamps debug datetime msec
@@ -188,20 +189,46 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname Switch-4
+hostname S4
 !
 boot-start-marker
 boot-end-marker
 !
+!
+enable password cisco
+!
 no aaa new-model
 !
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
 ip cef
 no ipv6 cef
+!
+!
 !
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 interface Ethernet0/0
  no shutdown
@@ -220,7 +247,6 @@ interface Ethernet0/2
  switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
- shutdown
 !
 interface Ethernet0/3
  no shutdown
@@ -246,16 +272,24 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
+!
+!
+!
+!
+!
 control-plane
+!
+banner motd ATTENTION!!! Password needed!
 !
 line con 0
  logging synchronous
 line aux 0
 line vty 0 4
+ password cisco
  login
 !
+!
 end
-}
 ~~~
 
 - ## Часть 2. Определение коммутатора в качестве корневого моста (Root Bridge)
