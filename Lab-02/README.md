@@ -183,5 +183,11 @@ end
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/d84951344bef66936550fe3a89f464a0818b0991/Lab-02/NetworkScheme/STP%20Vlan2.png)
 
 В качестве корневого моста (Root Bridge) был добавлен коммутатор Switch-1, т.к. при одинаковых значениях (в лабораторной работе) BridgeID приоритет выбора падает на коммутатор, чей MainMAC-адрес меньше остальных.
+Ниже приведены результаты команды "show spanning-tree active" на каждом из коммутаторов:
 
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/RootBridge-SW1-VLAN20.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW2-STP-VLAN20.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW3-%20STP-VLAN20.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW4-STP-VLAN20.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW5-STP-VLAN20.png)
 
