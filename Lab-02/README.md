@@ -188,7 +188,7 @@ end
 
 Ниже приведены результаты команды "show spanning-tree active" на каждом из коммутаторов:
 
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/RootBridge-SW1-VLAN20.png)
+![SW1](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/RootBridge-SW1-VLAN20.png)
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW2-STP-VLAN20.png)
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW3-%20STP-VLAN20.png)
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW4-STP-VLAN20.png)
