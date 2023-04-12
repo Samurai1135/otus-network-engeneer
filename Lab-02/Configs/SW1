@@ -1,3 +1,6 @@
+        
+!
+! Last configuration change at 20:51:15 UTC Tue Apr 11 2023
 !
 version 15.2
 service timestamps debug datetime msec
@@ -5,52 +8,77 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname Switch-1
+hostname Switch1
 !
 boot-start-marker
 boot-end-marker
 !
+!
+!
 no aaa new-model
+!
+!
+!
+!
+!
+!
+!
 !
 ip cef
 no ipv6 cef
+!
+!
 !
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
 !
-Conf t
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 interface Ethernet0/0
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/1
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/2
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/3
  no shutdown
+ switchport access vlan 20
+ switchport mode access
 !
 interface Ethernet1/0
  no shutdown
 !
 interface Ethernet1/1
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
+ shutdown
 !
 interface Ethernet1/2
  no shutdown
@@ -63,7 +91,13 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
+!
+!
+!
+!
+!
 control-plane
+!
 !
 line con 0
  logging synchronous
@@ -71,4 +105,7 @@ line aux 0
 line vty 0 4
  login
 !
+!
 end
+
+    
