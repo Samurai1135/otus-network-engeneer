@@ -1,4 +1,6 @@
-        
+
+!
+! Last configuration change at 09:37:33 UTC Wed Apr 12 2023
 !
 version 15.4
 service timestamps debug datetime msec
@@ -11,6 +13,7 @@ boot-start-marker
 boot-end-marker
 !
 !
+enable password cisco
 !
 no aaa new-model
 mmi polling-interval 60
@@ -31,6 +34,7 @@ mmi snmp-timeout 180
 !
 !
 !
+no ip domain lookup
 ip cef
 no ipv6 cef
 !
@@ -74,6 +78,11 @@ interface Ethernet0/0.30
  encapsulation dot1Q 30
  ip address 10.128.30.254 255.255.255.0
 !
+interface Ethernet0/0.254
+ no shutdown
+ encapsulation dot1Q 254
+ ip address 10.128.254.254 255.255.255.0
+!
 interface Ethernet0/1
  no shutdown
  no ip address
@@ -106,15 +115,16 @@ control-plane
 !
 !
 !
+banner motd Attemtion! Need Password!
 !
 line con 0
  logging synchronous
 line aux 0
 line vty 0 4
+ password cisco
+ logging synchronous
  login
  transport input none
 !
 !
 end
-
-    
