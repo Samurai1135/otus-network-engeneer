@@ -60,11 +60,6 @@ interface Ethernet0/0.30
  encapsulation dot1Q 30
  ip address 10.128.30.254 255.255.255.0
 !
-interface Ethernet0/0.254
- no shutdown
- encapsulation dot1Q 254
- ip address 10.128.254.254 255.255.255.0
-!
 interface Ethernet0/1
  no shutdown
  no ip address
@@ -125,19 +120,19 @@ vlan internal allocation policy ascending
 !
 interface Ethernet0/0
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/1
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/2
  no shutdown
- switchport trunk allowed vlan 20,30,254
+ switchport trunk allowed vlan 20,30
  switchport trunk encapsulation dot1q
  switchport mode trunk
  shutdown
