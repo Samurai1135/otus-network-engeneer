@@ -17,7 +17,7 @@
 <br><br>
 - ## Часть 1. Топология сети и основные параметры сетевых устройств
 
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/e9c80de0cbc62366fff3cf5a6a07605fa480f33a/Lab-02/NetworkScheme/Topology.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/8b6e6785283c7d86172ae0cff723feca60682384/Lab-02/NetworkScheme/NetworkScheme.png)
 <br>
 
 #### Используемое оборудование и конфигурация портов:
