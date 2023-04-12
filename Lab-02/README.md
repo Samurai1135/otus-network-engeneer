@@ -179,6 +179,6 @@ end
 
 - ## Часть 2. Определение коммутатора в качестве корневого моста (Root Bridge)
 
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/d6ef12e2c6245cc9231450ca6808c0cbafcabfeb/Lab-02/NetworkScheme/Lab-02.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/d84951344bef66936550fe3a89f464a0818b0991/Lab-02/NetworkScheme/STP%20Vlan2.png)
 
 В качествее корневого моста (Root Bridge) был добавлен коммутатор Switch-1, т.к. при одинаковых значениях (в лабораторной работе)
