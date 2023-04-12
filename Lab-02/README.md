@@ -60,7 +60,6 @@ hostname Router1
 boot-start-marker
 boot-end-marker
 !
-!
 enable password cisco
 !
 no aaa new-model
@@ -69,48 +68,13 @@ no mmi auto-configure
 no mmi pvc
 mmi snmp-timeout 180
 !
-!
-!
-!
-!
-!
-!
-!
-
-
-!
-!
-!
-!
 no ip domain lookup
 ip cef
 no ipv6 cef
 !
 multilink bundle-name authenticated
 !
-!
-!
-!
-!
-!
-!
-!
-!
 redundancy
-!
-!
-! 
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface Ethernet0/0
  no shutdown
@@ -152,16 +116,7 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 !
-!
-!
-!
 control-plane
-!
-!
-!
-!
-!
-!
 !
 banner motd Attemtion! Need Password!
 !
@@ -173,7 +128,6 @@ line vty 0 4
  logging synchronous
  login
  transport input none
-!
 !
 ~~~
 
@@ -194,41 +148,18 @@ hostname S4
 boot-start-marker
 boot-end-marker
 !
-!
 enable password cisco
 !
 no aaa new-model
-!
-!
-!
-!
-!
-!
-!
 !
 no ip domain-lookup
 ip cef
 no ipv6 cef
 !
-!
-!
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
 !
 vlan internal allocation policy ascending
-!
-! 
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 interface Ethernet0/0
  no shutdown
@@ -271,11 +202,6 @@ ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
-!
-!
-!
-!
-!
 !
 control-plane
 !
