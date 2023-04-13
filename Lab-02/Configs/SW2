@@ -14,7 +14,7 @@ boot-start-marker
 boot-end-marker
 !
 !
-enable password cisco
+enable password class
 !
 no aaa new-model
 !
