@@ -60,7 +60,7 @@ hostname Router1
 boot-start-marker
 boot-end-marker
 !
-enable password cisco
+enable password class
 !
 no aaa new-model
 mmi polling-interval 60
@@ -148,7 +148,7 @@ hostname S4
 boot-start-marker
 boot-end-marker
 !
-enable password cisco
+enable password class
 !
 no aaa new-model
 !
