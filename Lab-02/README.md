@@ -523,10 +523,9 @@ Et1/1               Desg FWD 100       128.6    Shr
 
   Добавим транковое соединение SW5 с SW1 через интерфейсы eth1/1 обоих коммутаторов
   ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5ab7618a4014591d182a436f780733e5d6b7e719/Lab-02/NetworkScheme/STP-SW5-SW1.png)
-  ~~~
+ ~~~
   S5#sh sp
-
-VLAN0020
+  VLAN0020
   Spanning tree enabled protocol rstp
   Root ID    Priority    32788
              Address     aabb.cc00.1000
@@ -569,7 +568,7 @@ Et0/1               Altn BLK 100       128.2    Shr
 Et0/2               Desg LRN 100       128.3    Shr
 Et1/0               Desg FWD 100       128.5    Shr
 Et1/1               Desg LRN 100       128.6    Shr
-  ~~~
+~~~
 <br>
 Как видно из результатов команды "show spanning-tree active" на коммутаторе Switch5(SW5) интерфейс eth1/1 перешел в режим Alternate-port, т.к. PortID отправителя SW1(e0/2) меньше, чем у SW1(eth1/1), хотя оба транка связывают коммутатор с RootBridge и имеют одинаковую стоимость пути до корневого коммутатора RootPathCost.
 В случае отключения транка на портах e0/2 коммутаторов SW5 и SW1 порт eth1/1 коммутатора SW5 станет Root-портом
