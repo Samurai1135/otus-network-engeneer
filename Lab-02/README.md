@@ -523,7 +523,53 @@ Et1/1               Desg FWD 100       128.6    Shr
 
   Добавим транковое соединение SW5 с SW1 через интерфейсы eth1/1 обоих коммутаторов
   ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5ab7618a4014591d182a436f780733e5d6b7e719/Lab-02/NetworkScheme/STP-SW5-SW1.png)
-  ![](https://github.com/Samurai1135/otus-network-engeneer/blob/1c072f0c2af0372aeeadf2401aa17595c0de59ed/Lab-02/NetworkScheme/SW5-STP-e1:1.png)
+  ~~~
+  S5#sh sp
+
+VLAN0020
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32788
+             Address     aabb.cc00.1000
+             Cost        100
+             Port        3 (Ethernet0/2)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32788  (priority 32768 sys-id-ext 20)
+             Address     aabb.cc00.5000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Et0/0               Altn BLK 100       128.1    Shr
+Et0/1               Desg LRN 100       128.2    Shr
+Et0/2               Root FWD 100       128.3    Shr
+Et0/3               Desg LRN 100       128.4    Shr
+Et1/1               Altn BLK 100       128.6    Shr
+
+
+
+VLAN0030
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32798
+             Address     aabb.cc00.2000
+             Cost        100
+             Port        1 (Ethernet0/0)
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32798  (priority 32768 sys-id-ext 30)
+             Address     aabb.cc00.5000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Et0/0               Root FWD 100       128.1    Shr
+Et0/1               Altn BLK 100       128.2    Shr
+Et0/2               Desg LRN 100       128.3    Shr
+Et1/0               Desg FWD 100       128.5    Shr
+Et1/1               Desg LRN 100       128.6    Shr
+  ~~~
 <br>
 Как видно из результатов команды "show spanning-tree active" на коммутаторе Switch5(SW5) интерфейс eth1/1 перешел в режим Alternate-port, т.к. PortID отправителя SW1(e0/2) меньше, чем у SW1(eth1/1), хотя оба транка связывают коммутатор с RootBridge и имеют одинаковую стоимость пути до корневого коммутатора RootPathCost.
 В случае отключения транка на портах e0/2 коммутаторов SW5 и SW1 порт eth1/1 коммутатора SW5 станет Root-портом
