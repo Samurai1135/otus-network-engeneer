@@ -229,8 +229,52 @@ end
 Ниже приведены результаты команды "show spanning-tree active" на каждом из коммутаторов:
 
 ### SW1
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/RootBridge-SW1-VLAN20.png)
-### SW2
+~~~
+S1#sh spanning-tree
+
+VLAN0001
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32769
+             Address     aabb.cc00.1000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     aabb.cc00.1000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Et1/2               Desg LRN 100       128.7    Shr
+Et1/3               Desg LRN 100       128.8    Shr
+
+
+ --More--
+*Apr 17 07:05:14.044: %LINK-3-UPDOWN: Interface Vlan20, changed state to up
+*Apr 17 07:05:15.051: %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan20, changed state to up
+
+VLAN0020
+  Spanning tree enabled protocol rstp
+  Root ID    Priority    32788
+             Address     aabb.cc00.1000
+             This bridge is the root
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32788  (priority 32768 sys-id-ext 20)
+             Address     aabb.cc00.1000
+             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  300 sec
+
+Interface           Role Sts Cost      Prio.Nbr Type
+------------------- ---- --- --------- -------- --------------------------------
+Et0/0               Desg FWD 100       128.1    Shr
+Et0/1               Desg FWD 100       128.2    Shr
+Et0/2               Desg FWD 100       128.3    Shr
+Et0/3               Desg FWD 100       128.4    Shr
+Et1/0               Desg FWD 100       128.5    Shr
+Et1/1               Desg FWD 100       128.6    Shr
+~~~
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW2-STP-VLAN20.png)
 ### SW3
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/031e2b010c3fd1fb508cc59eb9eda3876dd8562a/Lab-02/NetworkScheme/SW3-%20STP-VLAN20.png)
