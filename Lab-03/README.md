@@ -317,7 +317,7 @@ interface Ethernet0/1
 `ipv6 address {address} link-local` // адрес IPv6-подсети <br>
 `ipv6 nd other-config-flag` // префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6) <br>
 
-### Свяжем IPv6 подсети создав маршрут:
+- ## Часть 6. Настройка маршрута между роутерами R1 и R2
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
 ~~~
