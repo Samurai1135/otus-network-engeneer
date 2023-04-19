@@ -262,6 +262,8 @@ VPCS> ping 192.168.220.1
 
 #### Используемое оборудование и конфигурация портов:
 <br>
+Префикс подсети со шлюзом на R1: FE80::1
+Префикс подсети со шлюзом на R2: FE80::2
 
 | Наименование       | Обозначение на схеме |  Порт подключения и    IP адресация |
 | :----------------- | :------------------- | :---------------------------------- |
@@ -275,3 +277,21 @@ VPCS> ping 192.168.220.1
 |Пользовательский ПК2| PC2                 |  eth0 -- IPv6: DHCPv6        |
 
 <br>
+- ## Часть 5. Настройка DHCPv6-сервера на роутере R1. Натройка пулов адресов. 
+
+~~~
+ipv6 unicast-routing
+ipv6 dhcp pool R1-STATELESS
+ dns-server 2001:DB8:ACAD::254
+ domain-name STATELESS.com
+!
+ipv6 dhcp pool R2-STATEFUL
+ address prefix 2001:DB8:ACAD:3:AAA::/80
+ dns-server 2001:DB8:ACAD::254
+ domain-name STATEFUL.com
+~~~
+`ipv6 unicast-routing` //включаем маршрутизацию по протоколу IPv6
+`ipv6 dhcp pool {PoolName}` //задаем имя пула адресов IPv6
+`dns-server {address}` //указываем адрес DNS-сервера
+`domain-name`// указываем имя домена
+`address prefix {IPv6 prefix}` //назначаемый префикс адреса IPv6, который DHCPv6-сервер будет добавлять к адресам сетевых устройств
