@@ -202,14 +202,18 @@ end
 
 ~~~
 
-ip dhcp excluded-address 192.168.1.254 //Исключаем адрес из списка DHCP
-ip dhcp pool Pool-1 //Выбираем название пула адресов  Pool-1 для подсети 192.168.1.0/24
- network 192.168.1.0 255.255.255.0 //Указываем подсеть для раздачи адресов
- default-router 192.168.1.254 // Указываем шлюз по-умолчанию
+ip dhcp excluded-address 192.168.1.254 
+ip dhcp pool Pool-1 
+ network 192.168.1.0 255.255.255.0 
+ default-router 192.168.1.254 
 ip dhcp pool Pool-220
  network 192.168.220.0 255.255.255.0
  default-router 192.168.220.2 
 ~~~
+`ip dhcp excluded-address {address}` //Исключаем адрес из списка DHCP
+`ip dhcp pool {Pool-Name}`           //Выбираем название пула адресов
+`network`                            //Указываем подсеть, из которой будет раздача адресов IPv4
+`default-router`                     //Шлюз по-умолчанию (интерфейс, смотрящий в подсеть)
 
 - ## Часть 3. Настройка DHCP-реле на роутере R2
 
