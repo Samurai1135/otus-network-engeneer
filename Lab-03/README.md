@@ -317,7 +317,28 @@ interface Ethernet0/1
 `ipv6 address {address} link-local` // адрес IPv6-подсети <br>
 `ipv6 nd other-config-flag` // префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6) <br>
 
-- ## Часть 6. Настройка маршрута между роутерами R1 и R2
+- ## Часть 6. Настройка роутера R2. Настройка маршрута между роутерами R1 и R2
+### Настройка портов роутера R2:
+~~~
+ipv6 unicast-routing
+interface Ethernet0/0
+ no shutdown
+ no ip address
+ ipv6 address FE80::2 link-local
+ ipv6 address 2001:DB8:ACAD:2::2/64
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+ ipv6 address FE80::1 link-local
+ ipv6 address 2001:DB8:ACAD:3::1/64
+ ipv6 nd managed-config-flag
+ ipv6 dhcp relay destination 2001:DB8:ACAD:2::1 Ethernet0/0
+~~~
+`ipv6 nd managed-config-flag` // получение настроек от DHCPv6-сервера
+`ipv6 dhcp relay destination` // ретрансляция DHCPv6 на роутере R2
+
+### Настройка маршрута между R1 и R2:
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
 ~~~
