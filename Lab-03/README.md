@@ -337,15 +337,15 @@ interface Ethernet0/1
  ipv6 nd managed-config-flag
  ipv6 dhcp relay destination 2001:DB8:ACAD:2::1 Ethernet0/0
 ~~~
-`ipv6 nd managed-config-flag` // получение настроек от DHCPv6-сервера
-`ipv6 dhcp relay destination` // ретрансляция DHCPv6 на роутере R2
+`ipv6 nd managed-config-flag` // получение настроек от DHCPv6-сервера <br>
+`ipv6 dhcp relay destination` // ретрансляция DHCPv6 на роутере R2 <br>
 
 ### Настройка маршрута между R1 и R2:
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
 ~~~
-`::/0` //все адреса с любой длиной префикса
-`2001:DB8:ACAD:2::2` // адрес интерфейса R1, смотрящего в сторону R2
+`::/0` //все адреса с любой длиной префикса <br>
+`2001:DB8:ACAD:2::2` // адрес интерфейса R1, смотрящего в сторону R2 <br>
 
 ### Проведем проверку работоспособности сети:
 PC2:
@@ -369,3 +369,5 @@ VPCS> ping 2001:db8:acad:3:2050:79ff:fe66:6806/64
 2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=4 ttl=60 time=0.795 ms
 2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=5 ttl=60 time=0.841 ms
 ~~~
+
+Как видим, сеть так-же работает!
