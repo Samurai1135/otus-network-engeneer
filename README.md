@@ -18,4 +18,4 @@
 Для быстрого доступа к работам воспользуйтесь ссылками ниже:
 > [Lab-01](https://github.com/Samurai1135/otus-network-engeneer/blob/45fa28f15c72db07f33d38bd332530420a0517d2/Lab-01/README.MD) <br>
 > [Lab-02](https://github.com/Samurai1135/otus-network-engeneer/blob/fe3bcb8d6106efe5f1a5744c833196376c0e6edf/Lab-02/README.md) <br>
-> [Lab-03](https://github.com/Samurai1135/otus-network-engeneer/blob/b55cb9dd4b49f29dc831f2220d103db8c1bbf208/Lab-03/README.md)
+> [Lab-03](https://github.com/Samurai1135/otus-network-engeneer/blob/b1497c6f07de99c2bbdaac026ca51c03b5d019f8/Lab-03/README.md)
