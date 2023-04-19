@@ -278,6 +278,7 @@ VPCS> ping 192.168.220.1
 
 <br>
 - ## Часть 5. Настройка DHCPv6-сервера на роутере R1. Натройка пулов адресов и портов. 
+
 Настройка пулов адресов:
 ~~~
 ipv6 unicast-routing
@@ -295,6 +296,7 @@ ipv6 dhcp pool R2-STATEFUL
 `dns-server {address}` //указываем адрес DNS-сервера <br>
 `domain-name`// указываем имя домена <br>
 `address prefix {IPv6 prefix}` //назначаемый префикс адреса IPv6, который DHCPv6-сервер будет добавлять к адресам сетевых устройств <br>
+
 Настройка интерфейсов:
 ~~~
 interface Ethernet0/0
@@ -310,10 +312,10 @@ interface Ethernet0/1
  ipv6 nd other-config-flag
  ipv6 dhcp server R1-STATELESS
 ~~~
-`no ip address` //отсутствует IPv4-адрес (мы используем протокол IPv6)
-`ipv6 address {address} link-local` //адрес IPv6-подсети
-`ipv6 nd other-config-flag` //префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6)
-`ipv6 dhcp server {address/name}` //адрес{имя} DHCP-сервера
+`no ip address` //отсутствует IPv4-адрес (мы используем протокол IPv6) <br>
+`ipv6 address {address} link-local` //адрес IPv6-подсети <br>
+`ipv6 nd other-config-flag` //префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6) <br>
+
 Свяжем IPv6 подсети создав маршрут:
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
