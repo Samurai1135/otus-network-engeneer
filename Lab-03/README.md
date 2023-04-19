@@ -298,6 +298,9 @@ ipv6 dhcp pool R2-STATEFUL
 `domain-name`// указываем имя домена <br>
 `address prefix {IPv6 prefix}` // назначаемый префикс адреса IPv6, который DHCPv6-сервер будет добавлять к адресам сетевых устройств <br>
 
+### Пул STATELESS - без сохранения состояния, адреса назначаются по протоколу SLAAC без участия DHCPv6-сервера
+### Пул STATEFUL - назначение адресов происходит DHCPv6-сервером
+
 ### Настройка интерфейсов:
 ~~~
 interface Ethernet0/0
@@ -341,4 +344,29 @@ interface Ethernet0/1
 ### Настройка маршрута между R1 и R2:
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
+~~~
+`::/0` //все адреса с любой длиной префикса
+`2001:DB8:ACAD:2::2` // адрес интерфейса R1, смотрящего в сторону R2
+
+### Проведем проверку работоспособности сети:
+PC2:
+~~~
+VPCS> ip auto
+GLOBAL SCOPE      : 2001:db8:acad:3:2050:79ff:fe66:6806/64
+ROUTER LINK-LAYER : aa:bb:cc:00:20:10
+~~~
+Результат пинга PC2 с PC1:
+~~~
+PC1 : 2001:db8:acad:1:2050:79ff:fe66:6805/64
+
+GLOBAL SCOPE      : 2001:db8:acad:1:2050:79ff:fe66:6805/64
+ROUTER LINK-LAYER : 00:00:00:00:00:00
+
+VPCS> ping 2001:db8:acad:3:2050:79ff:fe66:6806/64
+
+2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=1 ttl=60 time=34.878 ms
+2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=2 ttl=60 time=0.780 ms
+2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=3 ttl=60 time=0.797 ms
+2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=4 ttl=60 time=0.795 ms
+2001:db8:acad:3:2050:79ff:fe66:6806 icmp6_seq=5 ttl=60 time=0.841 ms
 ~~~
