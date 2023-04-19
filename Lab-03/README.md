@@ -259,52 +259,19 @@ VPCS> ping 192.168.220.1
 - ## Часть 4. Настройка топологии IPv6 сети и основных параметров коммутаторов и маршрутизаторов
 Будем использовать схему сети из предыдущего примера:
   ![](https://github.com/Samurai1135/otus-network-engeneer/blob/45c34561b083ef0c8ed43fcb8247d5be92a706f6/Lab-03/NetworkScheme/IPv6.png)
- ~~~
-  S5#sh sp
-  VLAN0020
-  Spanning tree enabled protocol rstp
-  Root ID    Priority    32788
-             Address     aabb.cc00.1000
-             Cost        100
-             Port        3 (Ethernet0/2)
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
 
-  Bridge ID  Priority    32788  (priority 32768 sys-id-ext 20)
-             Address     aabb.cc00.5000
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-             Aging Time  300 sec
-
-Interface           Role Sts Cost      Prio.Nbr Type
-------------------- ---- --- --------- -------- --------------------------------
-Et0/0               Altn BLK 100       128.1    Shr
-Et0/1               Desg LRN 100       128.2    Shr
-Et0/2               Root FWD 100       128.3    Shr
-Et0/3               Desg LRN 100       128.4    Shr
-Et1/1               Altn BLK 100       128.6    Shr
-
-
-
-VLAN0030
-  Spanning tree enabled protocol rstp
-  Root ID    Priority    32798
-             Address     aabb.cc00.2000
-             Cost        100
-             Port        1 (Ethernet0/0)
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-
-  Bridge ID  Priority    32798  (priority 32768 sys-id-ext 30)
-             Address     aabb.cc00.5000
-             Hello Time   2 sec  Max Age 20 sec  Forward Delay 15 sec
-             Aging Time  300 sec
-
-Interface           Role Sts Cost      Prio.Nbr Type
-------------------- ---- --- --------- -------- --------------------------------
-Et0/0               Root FWD 100       128.1    Shr
-Et0/1               Altn BLK 100       128.2    Shr
-Et0/2               Desg LRN 100       128.3    Shr
-Et1/0               Desg FWD 100       128.5    Shr
-Et1/1               Desg LRN 100       128.6    Shr
-~~~
+#### Используемое оборудование и конфигурация портов:
 <br>
-Как видно из результатов команды "show spanning-tree active" на коммутаторе Switch5(SW5) интерфейс eth1/1 перешел в режим Alternate-port, т.к. PortID отправителя SW1(e0/2) меньше, чем у SW1(eth1/1), хотя оба транка связывают коммутатор с RootBridge и имеют одинаковую стоимость пути до корневого коммутатора RootPathCost.
-В случае отключения транка на портах e0/2 коммутаторов SW5 и SW1 порт eth1/1 коммутатора SW5 станет Root-портом
+
+| Наименование       | Обозначение на схеме |  Порт подключения и    IP адресация |
+| :----------------- | :------------------- | :---------------------------------- |
+|Маршрутизатор/роутер| R1              |  eth0/0 -- IPv6:2001:DB8:ACAD:2::1/64  |  
+|                    |                      |  eth0/1 --  IPv6:2001:DB8:ACAD:1::1/64 |
+|Маршрутизатор/роутер| R2              |  eth0/0 -- IPv6:2001:DB8:ACAD:2::2/64  |  
+|                    |                      |  eth0/1 --  IPv6:2001:DB8:ACAD:3::1/64 |
+|Коммутатор/Свитч 1. | S1              |  eth0/1 - trunk, eth0/0 - access  |
+|Коммутатор/Свитч 2. | S2              |  eth0/1 - trunk, eth0/0 - access|
+|Пользовательский ПК1| PC1                 |  eth0 -- IPv6:dhcp         |
+|Пользовательский ПК2| PC2                 |  eth0 -- IPv6:dhcp        |
+
+<br>
