@@ -37,29 +37,41 @@
 <br>
 
 #### Параметры сетевых устройств 
-> Пример конфигурации маршрутизатора [Router-1](https://github.com/Samurai1135/otus-network-engeneer/blob/4e1c5e6eeeb28e85e584e8798aa26700819cb008/Lab-02/Configs/Router-1):
+> Пример конфигурации маршрутизатора [R1](https://github.com/Samurai1135/otus-network-engeneer/blob/e53521d24920c8734b7d5570d00f27144669b4b7/Lab-03/Configs/IPv4/R1):
 ~~~
 
 !
-! Last configuration change at 09:37:33 UTC Wed Apr 12 2023
+! Last configuration change at 07:37:33 UTC Wed Apr 19 2023
 !
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname Router1
+hostname R1
 !
 boot-start-marker
 boot-end-marker
 !
-enable password class
+!
+enable secret 5 $1$dM9x$134d3t3KbFSnNZLWXRLVh1
+enable password cisco
 !
 no aaa new-model
 mmi polling-interval 60
 no mmi auto-configure
 no mmi pvc
 mmi snmp-timeout 180
+!
+ip dhcp excluded-address 192.168.1.254
+!
+ip dhcp pool Pool-1
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.254 
+!
+ip dhcp pool Pool-220
+ network 192.168.220.0 255.255.255.0
+ default-router 192.168.220.2 
 !
 no ip domain lookup
 ip cef
@@ -71,27 +83,11 @@ redundancy
 !
 interface Ethernet0/0
  no shutdown
- no ip address
-!
-interface Ethernet0/0.20
- no shutdown
- encapsulation dot1Q 20
- ip address 10.128.20.254 255.255.255.0
-!
-interface Ethernet0/0.30
- no shutdown
- encapsulation dot1Q 30
- ip address 10.128.30.254 255.255.255.0
-!
-interface Ethernet0/0.254
- no shutdown
- encapsulation dot1Q 254
- ip address 10.128.254.254 255.255.255.0
+ ip address 10.0.0.1 255.255.255.252
 !
 interface Ethernet0/1
  no shutdown
- no ip address
- shutdown
+ ip address 192.168.1.254 255.255.255.0
 !
 interface Ethernet0/2
  no shutdown
@@ -108,10 +104,11 @@ ip forward-protocol nd
 !
 no ip http server
 no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
 !
 control-plane
 !
-banner motd Attemtion! Need Password!
+banner motd Secure Zone! Password protection!
 !
 line con 0
  logging synchronous
@@ -122,9 +119,12 @@ line vty 0 4
  login
  transport input none
 !
+!
+end
+
 ~~~
 
-> Пример конфигурации коммутатора [Switch-4](https://github.com/Samurai1135/otus-network-engeneer/blob/5e792fcf66594cdf07a56e5f768891060c2ee396/Lab-02/Configs/SW4):
+> Пример конфигурации коммутатора [S1](https://github.com/Samurai1135/otus-network-engeneer/blob/e53521d24920c8734b7d5570d00f27144669b4b7/Lab-03/Configs/IPv4/S1):
 
 ~~~
 !
