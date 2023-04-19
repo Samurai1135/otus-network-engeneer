@@ -280,7 +280,7 @@ VPCS> ping 192.168.220.1
 
 - ## Часть 5. Настройка DHCPv6-сервера на роутере R1. Натройка пулов адресов и портов. 
 
-Настройка пулов адресов:
+### Настройка пулов адресов:
 ~~~
 ipv6 unicast-routing
 ipv6 dhcp pool R1-STATELESS
@@ -292,13 +292,13 @@ ipv6 dhcp pool R2-STATEFUL
  dns-server 2001:DB8:ACAD::254
  domain-name STATEFUL.com
 ~~~
-`ipv6 unicast-routing` //включаем маршрутизацию по протоколу IPv6 <br>
-`ipv6 dhcp pool {PoolName}` //задаем имя пула адресов IPv6 <br>
-`dns-server {address}` //указываем адрес DNS-сервера <br>
+`ipv6 unicast-routing` // включаем маршрутизацию по протоколу IPv6 <br>
+`ipv6 dhcp pool {PoolName}` // задаем имя пула адресов IPv6 <br>
+`dns-server {address}` // указываем адрес DNS-сервера <br>
 `domain-name`// указываем имя домена <br>
-`address prefix {IPv6 prefix}` //назначаемый префикс адреса IPv6, который DHCPv6-сервер будет добавлять к адресам сетевых устройств <br>
+`address prefix {IPv6 prefix}` // назначаемый префикс адреса IPv6, который DHCPv6-сервер будет добавлять к адресам сетевых устройств <br>
 
-Настройка интерфейсов:
+### Настройка интерфейсов:
 ~~~
 interface Ethernet0/0
  no ip address
@@ -313,11 +313,11 @@ interface Ethernet0/1
  ipv6 nd other-config-flag
  ipv6 dhcp server R1-STATELESS
 ~~~
-`no ip address` //отсутствует IPv4-адрес (мы используем протокол IPv6) <br>
-`ipv6 address {address} link-local` //адрес IPv6-подсети <br>
-`ipv6 nd other-config-flag` //префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6) <br>
+`no ip address` // отсутствует IPv4-адрес (мы используем протокол IPv6) <br>
+`ipv6 address {address} link-local` // адрес IPv6-подсети <br>
+`ipv6 nd other-config-flag` // префикс сети предоставляется по протоколу SLAAC (без помощи DHCPv6) <br>
 
-Свяжем IPv6 подсети создав маршрут:
+### Свяжем IPv6 подсети создав маршрут:
 ~~~
 ipv6 route ::/0 2001:DB8:ACAD:2::2
 ~~~
