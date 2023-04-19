@@ -257,9 +257,8 @@ VPCS> ping 192.168.220.1
 
 
 - ## Часть 4. Настройка топологии IPv6 сети и основных параметров коммутаторов и маршрутизаторов
-
-  Добавим транковое соединение SW5 с SW1 через интерфейсы eth1/1 обоих коммутаторов
-  ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5ab7618a4014591d182a436f780733e5d6b7e719/Lab-02/NetworkScheme/STP-SW5-SW1.png)
+Будем использовать схему сети из предыдущего примера:
+  ![](https://github.com/Samurai1135/otus-network-engeneer/blob/45c34561b083ef0c8ed43fcb8247d5be92a706f6/Lab-03/NetworkScheme/IPv6.png)
  ~~~
   S5#sh sp
   VLAN0020
