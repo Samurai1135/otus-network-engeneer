@@ -127,8 +127,9 @@ end
 > Пример конфигурации коммутатора [S1](https://github.com/Samurai1135/otus-network-engeneer/blob/e53521d24920c8734b7d5570d00f27144669b4b7/Lab-03/Configs/IPv4/S1):
 
 ~~~
+
 !
-! Last configuration change at 09:39:21 UTC Wed Apr 12 2023
+! Last configuration change at 07:43:28 UTC Wed Apr 19 2023
 !
 version 15.2
 service timestamps debug datetime msec
@@ -136,18 +137,22 @@ service timestamps log datetime msec
 no service password-encryption
 service compress-config
 !
-hostname S4
+hostname S1
 !
 boot-start-marker
 boot-end-marker
 !
-enable password class
+!
+enable secret 5 $1$v2F.$wEdUNnUSpT/8C/eDOhLyp/
+enable password cisco
 !
 no aaa new-model
 !
 no ip domain-lookup
 ip cef
 no ipv6 cef
+!
+!
 !
 spanning-tree mode rapid-pvst
 spanning-tree extend system-id
@@ -156,39 +161,20 @@ vlan internal allocation policy ascending
 !
 interface Ethernet0/0
  no shutdown
- switchport trunk allowed vlan 20,30
- switchport trunk encapsulation dot1q
- switchport mode trunk
+ switchport mode access
 !
 interface Ethernet0/1
  no shutdown
- switchport trunk allowed vlan 20,30
+ switchport trunk allowed vlan 1,200
  switchport trunk encapsulation dot1q
  switchport mode trunk
 !
 interface Ethernet0/2
  no shutdown
- switchport trunk allowed vlan 20,30
- switchport trunk encapsulation dot1q
- switchport mode trunk
+ switchport access vlan 200
+ switchport mode access
 !
 interface Ethernet0/3
- no shutdown
- switchport access vlan 30
- switchport mode access
-!
-interface Ethernet1/0
- no shutdown
- switchport access vlan 20
- switchport mode access
-!
-interface Ethernet1/1
- no shutdown
-!
-interface Ethernet1/2
- no shutdown
-!
-interface Ethernet1/3
  no shutdown
 !
 ip forward-protocol nd
@@ -198,13 +184,14 @@ no ip http secure-server
 !
 control-plane
 !
-banner motd ATTENTION!!! Password needed!
+banner motd Secure Zone! Password protection!
 !
 line con 0
  logging synchronous
 line aux 0
 line vty 0 4
  password cisco
+ logging synchronous
  login
 !
 !
