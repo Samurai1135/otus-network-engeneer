@@ -1,0 +1,125 @@
+
+!
+! Last configuration change at 07:37:33 UTC Wed Apr 19 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$dM9x$134d3t3KbFSnNZLWXRLVh1
+enable password cisco
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.1.254
+!
+ip dhcp pool Pool-1
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.254 
+!
+ip dhcp pool Pool-220
+ network 192.168.220.0 255.255.255.0
+ default-router 192.168.220.2 
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.0.0.1 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 192.168.1.254 255.255.255.0
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd Secure Zone! Password protection!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ password cisco
+ logging synchronous
+ login
+ transport input none
+!
+!
+end

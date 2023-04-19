@@ -1,0 +1,3 @@
+set pcname VPCS
+ip 2001:db8:acad:3:2050:79ff:fe66:6806/64
+ip auto
