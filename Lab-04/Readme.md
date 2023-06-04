@@ -279,7 +279,15 @@ interface Ethernet0/1.6
 !
 ~~~
 
+Сеть в офисе <b>С.-Петербург</br> организована по такому-же принципу как и в офисе Москва:
+R16 и R17 объединены по протоколу VRRP
+Между SW9 и SW10 организован агрегированный канал
 
+#### R16 (VRRP):
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/d8bd5b2b953de1515d1948058c38aecc0ef2032b/Lab-04/Network%20Scheeme/123.png)
+
+#### R17 (VRRP):
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/d8bd5b2b953de1515d1948058c38aecc0ef2032b/Lab-04/Network%20Scheeme/321.png)
 
 
 
