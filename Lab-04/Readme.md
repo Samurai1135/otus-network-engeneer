@@ -15,3 +15,4 @@
 <br><br>
 - ## Часть 1. Адресное пространство для лабораторного стенда
 
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/58a7fa0f116f6d29fb50b61b751c714ddcf48901/Lab-04/Network%20Scheeme/stand.png)
