@@ -1,0 +1,126 @@
+﻿
+!
+! Last configuration change at 17:37:55 UTC Tue May 30 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Router
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 11.11.11.11 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.20.1 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.21.1 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.7.0.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+!
+router ospf 1
+ network 10.7.0.0 0.0.0.3 area 0
+ network 10.128.20.0 0.0.0.3 area 0
+ network 10.128.21.0 0.0.0.3 area 0
+ network 11.11.11.11 0.0.0.0 area 0
+!
+router bgp 1001
+ bgp log-neighbor-changes
+ neighbor 10.7.0.1 remote-as 101
+ neighbor 10.7.0.1 next-hop-self
+ neighbor 10.128.20.2 remote-as 1001
+ neighbor 10.128.20.2 next-hop-self
+ neighbor 10.128.21.2 remote-as 1001
+ neighbor 10.128.21.2 next-hop-self
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
