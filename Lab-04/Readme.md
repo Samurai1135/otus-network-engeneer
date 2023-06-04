@@ -129,8 +129,50 @@ R23-R24: 10.2.0.0/30<br>
 |                | eth 0/2             | 10.5.0.2/30 |
 
 
+- ## Часть 3. Настройка каждого VPC в отдельном VLAN
 
+В нашей сети для каждого офиса развернут свой DHCP-сервер на маршрутизаторах R15 (Vlan 6,7), R18 (Vlan 4,5), R28 (Vlan 2,3)
 
+#### Примеры конфигурации DHCP-серверов:
+
+<b>R15:</b>
+~~~
+!
+ip dhcp pool VLAN7
+ network 192.168.7.0 255.255.255.0
+ default-router 192.168.7.254 
+!
+ip dhcp pool VLAN6
+ network 192.168.6.0 255.255.255.0
+ default-router 192.168.6.254 
+!
+!
+~~~
+<b>R18:</b>
+~~~
+ip dhcp pool 4
+ network 192.168.4.0 255.255.255.0
+ default-router 192.168.4.254 
+!
+ip dhcp pool 5
+ network 192.168.5.0 255.255.255.0
+ default-router 192.168.5.254 
+~~~
+<b>R28:</b>
+~~~
+!
+ip dhcp excluded-address 192.168.2.254
+ip dhcp excluded-address 192.168.3.254
+!
+ip dhcp pool Vlan2
+ network 192.168.2.0 255.255.255.0
+ default-router 192.168.2.254 
+!
+ip dhcp pool Vlan3
+ network 192.168.3.0 255.255.255.0
+ default-router 192.168.3.254 
+!
+~~~
 
 
 
