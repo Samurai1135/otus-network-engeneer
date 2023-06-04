@@ -200,6 +200,83 @@ R12 Lb0: 13.13.13.13<br>
 R13 Lb0: 14.14.14.14<br>
 
 
+- ## Часть 5. Оптимизация использования линков и исключения broadcast-штормов
+
+В сети офиса Москва развернут агрегированный канал между SW4 и SW5 для увеличения отказоустойчивости и скорости передачи данных между свичами:
+
+~~~
+interface Port-channel1
+ no shutdown
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk allowed vlan 6,7
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ no shutdown
+ switchport trunk allowed vlan 6,7
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+~~~
+
+VLAN6 и VLAN 7 разведены по разным физическим портам коммутаторов R12 и R13, объединенных в VRRP:
+
+#### R12:
+~~~
+interface Ethernet0/0.6
+ no shutdown
+ encapsulation dot1Q 6
+ ip address 192.168.6.254 255.255.255.0
+ ip helper-address 10.128.22.1
+ vrrp 6 ip 192.168.6.254
+ vrrp 6 timers advertise 10
+ no vrrp 6 preempt
+ vrrp 6 priority 200
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/1.7
+ no shutdown
+ encapsulation dot1Q 7
+ ip address 192.168.7.253 255.255.255.0
+ ip helper-address 10.128.22.1
+ vrrp 7 ip 192.168.7.254
+ vrrp 7 timers advertise 10
+ no vrrp 7 preempt
+ vrrp 7 priority 50
+~~~
+#### R13:
+~~~
+interface Ethernet0/0.7
+ no shutdown
+ encapsulation dot1Q 7
+ ip address 192.168.7.254 255.255.255.0
+ ip helper-address 10.128.23.1
+ vrrp 7 ip 192.168.7.254
+ vrrp 7 timers advertise 10
+ no vrrp 7 preempt
+ vrrp 7 priority 200
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/1.6
+ no shutdown
+ encapsulation dot1Q 6
+ ip address 192.168.6.253 255.255.255.0
+ ip helper-address 10.128.23.1
+ vrrp 6 ip 192.168.6.254
+ vrrp 6 timers advertise 10
+ no vrrp 6 preempt
+ vrrp 6 priority 50
+!
+~~~
 
 
 
