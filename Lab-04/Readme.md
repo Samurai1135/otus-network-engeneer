@@ -131,48 +131,42 @@ R23-R24: 10.2.0.0/30<br>
 
 - ## Часть 3. Настройка каждого VPC в отдельном VLAN
 
-В нашей сети для каждого офиса развернут свой DHCP-сервер на маршрутизаторах R15 (Vlan 6,7), R18 (Vlan 4,5), R28 (Vlan 2,3)
 
-#### Примеры конфигурации DHCP-серверов:
+#### Примеры конфигурации VPC:
 
-<b>R15:</b>
+<b>VPC1:</b>
 ~~~
-!
-ip dhcp pool VLAN7
- network 192.168.7.0 255.255.255.0
- default-router 192.168.7.254 
-!
-ip dhcp pool VLAN6
- network 192.168.6.0 255.255.255.0
- default-router 192.168.6.254 
-!
-!
+set pcname VPCS
+ip 192.168.6.1 192.168.6.254 24
 ~~~
-<b>R18:</b>
+<b>VPC7:</b>
 ~~~
-ip dhcp pool 4
- network 192.168.4.0 255.255.255.0
- default-router 192.168.4.254 
-!
-ip dhcp pool 5
- network 192.168.5.0 255.255.255.0
- default-router 192.168.5.254 
+set pcname VPCS
+ip 192.168.7.1 192.168.7.254 24
 ~~~
-<b>R28:</b>
+<b>VPC8:</b>
 ~~~
-!
-ip dhcp excluded-address 192.168.2.254
-ip dhcp excluded-address 192.168.3.254
-!
-ip dhcp pool Vlan2
- network 192.168.2.0 255.255.255.0
- default-router 192.168.2.254 
-!
-ip dhcp pool Vlan3
- network 192.168.3.0 255.255.255.0
- default-router 192.168.3.254 
-!
+set pcname VPCS
+ip 192.168.4.1 192.168.4.254 24
+
 ~~~
+<b>VPC:</b>
+~~~
+set pcname VPCS
+ip 192.168.5.1 192.168.5.254 24
+~~~
+<b>VPC30:</b>
+~~~
+set pcname VPCS
+ip 192.168.2.1 192.168.2.254 24
+
+~~~
+<b>VPC31:</b>
+~~~
+set pcname VPCS
+ip 192.168.3.1 192.168.3.254 24
+~~~
+
 >VPC1 в VLAN 6 (192.168.6.1)<br>
 >VPC7 в VLAN 7 (192.168.7.1)<br>
 >VPC8 в VLAN 4 (192.168.4.1)<br>
