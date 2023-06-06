@@ -225,10 +225,6 @@ interface Ethernet0/0.6
  encapsulation dot1Q 6
  ip address 192.168.6.254 255.255.255.0
  ip helper-address 10.128.22.1
- vrrp 6 ip 192.168.6.254
- vrrp 6 timers advertise 10
- no vrrp 6 preempt
- vrrp 6 priority 200
 !
 interface Ethernet0/1
  no shutdown
@@ -239,10 +235,7 @@ interface Ethernet0/1.7
  encapsulation dot1Q 7
  ip address 192.168.7.253 255.255.255.0
  ip helper-address 10.128.22.1
- vrrp 7 ip 192.168.7.254
- vrrp 7 timers advertise 10
- no vrrp 7 preempt
- vrrp 7 priority 50
+
 ~~~
 #### R13:
 ~~~
