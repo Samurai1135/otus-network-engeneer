@@ -216,8 +216,7 @@ interface Ethernet0/1
 !
 ~~~
 
-VLAN6 и VLAN 7 разведены по разным физическим портам коммутаторов R12 и R13, на которых поднят протокол VRRP.
-Маршрутизатор R12 является MASTER для VLAN 6, маршрутизатор R13 является MASTER для VLAN 7:
+VLAN6 и VLAN 7 разведены по разным физическим портам коммутаторов R12 и R13.
 
 #### R12:
 ~~~
@@ -252,10 +251,7 @@ interface Ethernet0/0.7
  encapsulation dot1Q 7
  ip address 192.168.7.254 255.255.255.0
  ip helper-address 10.128.23.1
- vrrp 7 ip 192.168.7.254
- vrrp 7 timers advertise 10
- no vrrp 7 preempt
- vrrp 7 priority 200
+
 !
 interface Ethernet0/1
  no shutdown
@@ -266,22 +262,11 @@ interface Ethernet0/1.6
  encapsulation dot1Q 6
  ip address 192.168.6.253 255.255.255.0
  ip helper-address 10.128.23.1
- vrrp 6 ip 192.168.6.254
- vrrp 6 timers advertise 10
- no vrrp 6 preempt
- vrrp 6 priority 50
 !
 ~~~
 
 Сеть в офисе <b>С.-Петербург</b> организована по такому-же принципу как и в офисе Москва:
-R16 и R17 объединены по протоколу VRRP
 Между SW9 и SW10 организован агрегированный канал
-
-#### R16 (VRRP):
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/d8bd5b2b953de1515d1948058c38aecc0ef2032b/Lab-04/Network%20Scheeme/123.png)
-
-#### R17 (VRRP):
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/d8bd5b2b953de1515d1948058c38aecc0ef2032b/Lab-04/Network%20Scheeme/321.png)
 
 
 
