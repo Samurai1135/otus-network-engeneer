@@ -55,5 +55,5 @@ ip sla 2
 ip sla schedule 2 life forever start-time now
 !
 ~~~
-Проверим работу нашего задания:
+Проверим работу нашего задания: <br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/4de5fb53ce74a350d14e038d26c05e56d9d30a0c/Lab-05/Screenshots/stat.png)
