@@ -109,8 +109,8 @@ ip route 192.168.2.0 255.255.254.0 10.0.1.2 name 2Chok
 ip route 192.168.2.0 255.255.254.0 10.4.0.1 200 name 2Chok-Triada
 ~~~
 Проверим трассировку от VPC30 и VPC31 до Loopback-адреса офиса Лабытнанги:
-
-VPC30 - Лабытнанги:
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC30%20trace1.png)
-VPC31 - Лабытнанги:
+<br>
+VPC30 - Лабытнанги:<br>
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC30%20trace1.png)<br>
+VPC31 - Лабытнанги:<br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC31%20trace1.png)
