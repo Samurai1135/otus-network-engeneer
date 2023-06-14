@@ -15,7 +15,7 @@
 <br><br>
 - ## Часть 1. Адресное пространство для лабораторного стенда
 
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/58a7fa0f116f6d29fb50b61b751c714ddcf48901/Lab-04/Network%20Scheeme/stand.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/58a7fa0f116f6d29fb50b61b751c714ddcf48901/Lab-04/Network%20Scheeme/stand1.png)
 
 >Для связи коммутаторов между офисами и провайдерами используем сети класса А. Формат IP-адреса: 10.x.x.x с маской 255.255.255.252<br>
 >Для локальных сетей офисов используем сети класса С. Формат IP-адреса: 192.168.x.x с маской 255.255.255.0<br>
