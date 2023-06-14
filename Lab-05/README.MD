@@ -114,3 +114,11 @@ VPC30 - Лабытнанги:<br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC30%20trace1.png)<br>
 VPC31 - Лабытнанги:<br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC31%20trace1.png)
+<br>
+Мы видим, что трафик VLAN2 проходит по одному маршруту через R26, а трафик VLAN3 - через R25.
+Пробуем "погасить" линк eth0/1 на R26, ждем 5 секунд и повторно произведем трассировку до Лабытнанги с наших VPC. <br>
+VPC30 - Лабытнанги:<br>
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/ddb1446049702c0afd19497e5eb5c15b7c34866e/Lab-05/Screenshots/VPC30%20trace2.png) <br>
+VPC31 - Лабытнанги:<br>
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/ddb1446049702c0afd19497e5eb5c15b7c34866e/Lab-05/Screenshots/VPC31trace2.png)<br>
+Из скриншотов прекрасно видно, что трафик VLAN2 изменил маршрут согласно ROUTE-MAP и идет напрямую к R25.
