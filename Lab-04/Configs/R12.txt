@@ -1,6 +1,4 @@
-﻿
-!
-! Last configuration change at 18:44:57 UTC Tue May 30 2023
+
 !
 version 15.4
 service timestamps debug datetime msec
@@ -64,29 +62,26 @@ redundancy
 !
 interface Loopback0
  no shutdown
- ip address 13.13.13.13 255.255.255.255
+ ip address 100.0.1.13 255.255.255.255
 !
 interface Ethernet0/0
  no shutdown
- no ip address
+ ip address 10.128.25.1 255.255.255.252
 !
 interface Ethernet0/0.6
  no shutdown
  encapsulation dot1Q 6
  ip address 192.168.6.254 255.255.255.0
  ip helper-address 10.128.22.1
-
 !
 interface Ethernet0/1
  no shutdown
- no ip address
+ ip address 10.128.25.10 255.255.255.252
 !
 interface Ethernet0/1.7
  no shutdown
  encapsulation dot1Q 7
- ip address 192.168.7.253 255.255.255.0
  ip helper-address 10.128.22.1
-
 !
 interface Ethernet0/2
  no shutdown
@@ -116,18 +111,15 @@ interface Ethernet1/3
  no ip address
  shutdown
 !
-router ospf 1
- network 10.128.20.0 0.0.0.3 area 0
- network 10.128.22.0 0.0.0.3 area 0
- network 13.13.13.13 0.0.0.0 area 1
- network 192.168.6.0 0.0.0.255 area 1
- network 192.168.7.0 0.0.0.255 area 1
-!
 ip forward-protocol nd
 !
 !
 no ip http server
 no ip http secure-server
+ip route 192.168.6.0 255.255.255.0 10.128.25.2
+ip route 192.168.6.0 255.255.255.0 10.128.25.9
+ip route 192.168.7.0 255.255.255.0 10.128.25.9
+ip route 192.168.7.0 255.255.255.0 10.128.25.2
 !
 !
 !
