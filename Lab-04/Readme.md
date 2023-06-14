@@ -196,35 +196,21 @@ R13 Lb0: 100.0.1.15<br>
 
 - ## Часть 5. Оптимизация использования линков и исключения broadcast-штормов
 
-В сети офиса <b>Москва</b> развернут агрегированный канал между SW4 и SW5 для увеличения отказоустойчивости и скорости передачи данных между свичами:
+В сети офиса <b>Москва</b> заменены свичи SW4 и SW5 на трехуровневые (L3-Switches).
+Поднят протокол VRRP, объединяющий свичи в один виртуальный для увеличения количества линков.
+Свич SW4 является MASTER для VLAN 6. Свич SW5 является MASTER для VLAN 7
 
-~~~
-interface Port-channel1
- no shutdown
-!
-interface Ethernet0/0
- no shutdown
- switchport trunk allowed vlan 6,7
- switchport trunk encapsulation dot1q
- switchport mode trunk
-!
-interface Ethernet0/1
- no shutdown
- switchport trunk allowed vlan 6,7
- switchport trunk encapsulation dot1q
- switchport mode trunk
-!
-~~~
+Примеры конфигурации свичей и VRRP: 
 
-VLAN6 и VLAN 7 разведены по разным физическим портам коммутаторов R12 и R13.
-
-#### R12:
+#### SW4:
 ~~~
 interface Ethernet0/0.6
  no shutdown
  encapsulation dot1Q 6
  ip address 192.168.6.254 255.255.255.0
- ip helper-address 10.128.22.1
+ vrrp 6 ip 192.168.6.254
+ no vrrp 6 preempt
+ vrrp 6 priority 200
 !
 interface Ethernet0/1
  no shutdown
@@ -234,17 +220,20 @@ interface Ethernet0/1.7
  no shutdown
  encapsulation dot1Q 7
  ip address 192.168.7.253 255.255.255.0
- ip helper-address 10.128.22.1
-
+ vrrp 7 ip 192.168.7.254
+ no vrrp 7 preempt
+!
 ~~~
-#### R13:
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/52815524c882c82a53e25683b8c971c340adb465/Lab-04/Network%20Scheeme/SW4.png)
+#### SW5:
 ~~~
 interface Ethernet0/0.7
  no shutdown
  encapsulation dot1Q 7
  ip address 192.168.7.254 255.255.255.0
- ip helper-address 10.128.23.1
-
+ vrrp 7 ip 192.168.7.254
+ no vrrp 7 preempt
+ vrrp 7 priority 200
 !
 interface Ethernet0/1
  no shutdown
@@ -254,12 +243,13 @@ interface Ethernet0/1.6
  no shutdown
  encapsulation dot1Q 6
  ip address 192.168.6.253 255.255.255.0
- ip helper-address 10.128.23.1
+ vrrp 6 ip 192.168.6.254
+ no vrrp 6 preempt
 !
 ~~~
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/52815524c882c82a53e25683b8c971c340adb465/Lab-04/Network%20Scheeme/SW5.png)
 
-Сеть в офисе <b>С.-Петербург</b> организована по такому-же принципу как и в офисе Москва:
-Между SW9 и SW10 организован агрегированный канал
+В сети офиса <b>С.-Петербург</b> между SW9 и SW10 организован агрегированный канал.
 
 
 
