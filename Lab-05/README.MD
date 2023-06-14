@@ -57,3 +57,27 @@ ip sla schedule 2 life forever start-time now
 ~~~
 Проверим работу нашего задания: <br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/4de5fb53ce74a350d14e038d26c05e56d9d30a0c/Lab-05/Screenshots/stat.png)
+
+Как видим - сервис работает.
+
+## Настроим переключение трафика между линками в случае недоступности одного из них:
+~~~
+route-map BALLANCE permit 10
+ match ip address VPC30
+ set ip next-hop verify-availability 10.0.0.1 10 track 1 //в случае доступности исользуем этот next-hop. 10 - приоритет
+ set ip next-hop verify-availability 10.0.1.1 20 track 2 //в случае недоступности первого next-hop используем этот
+ set ip next-hop 10.0.0.1
+!
+route-map BALLANCE permit 20
+ match ip address VPC31
+ set ip next-hop verify-availability 10.0.1.1 10 track 2
+ set ip next-hop verify-availability 10.0.0.1 20 track 1
+ set ip next-hop 10.0.1.1
+~~~
+~~~
+!
+track 1 ip sla 1 reachability //сопоставляем track 1 выполняющемуся правилу sla 1
+!
+track 2 ip sla 2 reachability
+~~~
+
