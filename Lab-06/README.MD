@@ -197,20 +197,105 @@ O*IA  0.0.0.0/0 [110/11] via 10.128.30.1, 00:00:44, Ethernet0/0
 C        10.128.30.0/30 is directly connected, Ethernet0/0
 L        10.128.30.2/32 is directly connected, Ethernet0/0
 ~~~
-Все маршруты пропали, кроме маршрута по-умолчанию.
+Все маршруты пропали, кроме маршрута по-умолчанию. <br><br>
 
+- ## Часть 4. Маршрутизатор R20 находится в зоне 102 и получает все маршруты, кроме маршрутов до сетей зоны 101.
+Смотрим на имеющиеся маршруты R20:
+~~~
+R20#sh ip route 
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
 
+Gateway of last resort is not set
 
+      100.0.0.0/32 is subnetted, 1 subnets
+C        100.0.1.18 is directly connected, Loopback0
+~~~
 
+Включим на R20 OSPF:
+~~~
+R20#sh ip route ospf
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
 
+Gateway of last resort is 10.128.31.1 to network 0.0.0.0
 
+O*E2  0.0.0.0/0 [110/1] via 10.128.31.1, 00:00:03, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 14 subnets, 3 masks
+O IA     10.128.20.0/30 [110/30] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.21.0/30 [110/50] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.22.0/30 [110/20] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.23.0/30 [110/50] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.25.0/30 [110/30] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.25.8/30 [110/30] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.26.0/30 [110/40] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.26.8/30 [110/40] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.30.0/30 [110/30] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.150.0/24 [110/20] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.200.0/24 [110/40] via 10.128.31.1, 00:00:03, Ethernet0/0
+O IA     10.128.201.0/24 [110/40] via 10.128.31.1, 00:00:03, Ethernet0/0
+~~~
+Подсеть 10.128.30.0/30 принадлежит зоне 101.
+Сделаем на R15 фильтр, который будет блокировать доступ к R19
 
+~~~
+ip prefix-list Block101 seq 5 deny 10.128.30.0/30
+ip prefix-list Block101 seq 100 permit 0.0.0.0/0 le 32
+~~~
 
+~~~
+router ospf 1
+ router-id 8.8.8.8
+ area 102 filter-list prefix Block101 in
+~~~
+В зону 102 должны поступать все маршруты за исключением маршрута к R19 в зону 101, проверим:
+~~~
+R20#sh ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
 
+Gateway of last resort is 10.128.31.1 to network 0.0.0.0
 
-
-
-
+O*E2  0.0.0.0/0 [110/1] via 10.128.31.1, 01:09:08, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 13 subnets, 3 masks
+O IA     10.128.20.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.21.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.22.0/30 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.23.0/30 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.25.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.25.8/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.26.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.26.8/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+C        10.128.31.0/30 is directly connected, Ethernet0/0
+L        10.128.31.2/32 is directly connected, Ethernet0/0
+O IA     10.128.150.0/24 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.200.0/24 [110/40] via 10.128.31.1, 00:00:30, Ethernet0/0
+O IA     10.128.201.0/24 [110/40] via 10.128.31.1, 00:00:30, Ethernet0/0
+      100.0.0.0/32 is subnetted, 1 subnets
+C        100.0.1.18 is directly connected, Loopback0
+~~~
+Подсеть 10.128.30.0/30 пропала, следовательно фильтрация работает!
 
 
 
