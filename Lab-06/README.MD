@@ -128,72 +128,91 @@ O        10.128.201.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
 ~~~
 O*E2 - это и есть маршрут по-умолчанию
 
+- ## Часть 3. Маршрутизатор R19 находится в зоне 101 и получает только маршрут по умолчанию.
+
+Для начала на R19(eth0/0) и R14(eth0/3) "погрузим" в зону 101 (Area101)
+~~~
+R14(config)#int e0/3
+R14(config-if)#ip os
+R14(config-if)#ip ospf 1 ar
+R14(config-if)#ip ospf 1 area 101
+~~~
+На R19 должны подтянуться все известные маршруты соседних сетей:
+~~~
+R19#sh ip route ospf
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
+2
+       ia - IS-IS inter area, * - candidate default, U - per-user static ro
+ute
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.128.30.1 to network 0.0.0.0
+
+O*E2  0.0.0.0/0 [110/1] via 10.128.30.1, 00:00:02, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 13 subnets, 3 masks
+O IA     10.128.20.0/30 [110/50] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.21.0/30 [110/20] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.22.0/30 [110/50] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.23.0/30 [110/30] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.25.0/30 [110/40] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.25.8/30 [110/40] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.26.0/30 [110/30] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.26.8/30 [110/30] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.150.0/24 [110/20] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.200.0/24 [110/40] via 10.128.30.1, 00:00:02, Ethernet0/0
+O IA     10.128.201.0/24 [110/40] via 10.128.30.1, 00:00:02, Ethernet0/0
+~~~
+Как видим, подгрузились все маршруты. Но нам нужен только маршрут по-умолчанию.
+Сделаем фильтрацию.
+Сперва заблокируем маршруты из других зон:
+~~~
+R19(config-router)#area 101 stub no-summary 
+~~~
+Потом выведем все доступные на R19 маршруты:
+
+~~~
+R19#sh ip route     
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
+2
+       ia - IS-IS inter area, * - candidate default, U - per-user static ro
+ute
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.128.30.1 to network 0.0.0.0
+
+O*IA  0.0.0.0/0 [110/11] via 10.128.30.1, 00:00:44, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C        10.128.30.0/30 is directly connected, Ethernet0/0
+L        10.128.30.2/32 is directly connected, Ethernet0/0
+~~~
+Все маршруты пропали, кроме маршрута по-умолчанию.
 
 
-Проверим работу нашего задания: <br>
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/4de5fb53ce74a350d14e038d26c05e56d9d30a0c/Lab-05/Screenshots/stat.png)
 
-Как видим - сервис работает.
 
-## Настроим переключение трафика между линками в случае недоступности одного из них:
-~~~
-route-map BALLANCE permit 10
- match ip address VPC30
- set ip next-hop verify-availability 10.0.0.1 10 track 1 //в случае доступности исользуем этот next-hop. 10 - приоритет
- set ip next-hop verify-availability 10.0.1.1 20 track 2 //в случае недоступности первого next-hop используем этот
- set ip next-hop 10.0.0.1
-!
-route-map BALLANCE permit 20
- match ip address VPC31
- set ip next-hop verify-availability 10.0.1.1 10 track 2
- set ip next-hop verify-availability 10.0.0.1 20 track 1
- set ip next-hop 10.0.1.1
-~~~
-~~~
-!
-track 1 ip sla 1 reachability //сопоставляем track 1 выполняющемуся правилу sla 1
-!
-track 2 ip sla 2 reachability
-~~~
 
-- ## Часть 4. Настройка для офиса Лабытнанги маршрута по-умолчанию.
 
-Ближайший "сосед" офиса Лабытнанги - R25 (eth 0/1)
-Зададим маршрут для R27:
-~~~
-ip route 0.0.0.0 0.0.0.0 10.0.3.1
-~~~
-## Теперь сделаем проверку переключения трафика на R28.
-Мы априори завели на каждом активном сетевом устройстве адрес Loopback-интерфейса. Поскольку подсети Лабытнанги не оговариваются - попробуем пропинговать его адрес Loopback 100.0.1.11
-Для работы сети нам нужно задать несколько маршрутов на роутерах R28,R25 и R26.
 
-R28:
-~~~
-ip route 100.0.1.11 255.255.255.255 10.0.0.1 name 2Labyt2 //маршрут до Лабытнанги через "нижнего" провайдера (R28-R26-R25-R27)
-ip route 100.0.1.11 255.255.255.255 10.0.1.1 name 2Labyt1 //маршрут до Лабытнанги через "верхнего" провайдера (R28-R25-R27)
-~~~
-R26:
-~~~
-ip route 100.0.1.11 255.255.255.255 10.4.0.2 name 2Labyt //маршрут до Лабытнанги
-ip route 192.168.2.0 255.255.254.0 10.0.0.2
-~~~
-R25:
-~~~
-ip route 100.0.1.11 255.255.255.255 10.0.3.2 name 2Labyt
-ip route 192.168.2.0 255.255.254.0 10.0.1.2 name 2Chok
-ip route 192.168.2.0 255.255.254.0 10.4.0.1 200 name 2Chok-Triada
-~~~
-Проверим трассировку от VPC30 и VPC31 до Loopback-адреса офиса Лабытнанги:
-<br>
-VPC30 - Лабытнанги:<br>
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC30%20trace1.png)<br>
-VPC31 - Лабытнанги:<br>
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/5dd284f103f2c40a526c2d3b5afc7fef8de54268/Lab-05/Screenshots/VPC31%20trace1.png)
-<br>
-Мы видим, что трафик VLAN2 проходит по одному маршруту через R26, а трафик VLAN3 - через R25.
-Пробуем "погасить" линк eth0/1 на R26, ждем 5 секунд и повторно произведем трассировку до Лабытнанги с наших VPC. <br>
-VPC30 - Лабытнанги:<br>
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/ddb1446049702c0afd19497e5eb5c15b7c34866e/Lab-05/Screenshots/VPC30%20trace2.png) <br>
-VPC31 - Лабытнанги:<br>
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/ddb1446049702c0afd19497e5eb5c15b7c34866e/Lab-05/Screenshots/VPC31trace2.png)<br>
-Из скриншотов прекрасно видно, что трафик VLAN2 изменил маршрут согласно ROUTE-MAP и идет напрямую к R25.
+
+
+
+
+
+
+
+
+
+
+
