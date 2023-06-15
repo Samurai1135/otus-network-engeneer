@@ -236,7 +236,7 @@ interface Ethernet0/1.7
  no vrrp 7 preempt
 !
 ~~~
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/52815524c882c82a53e25683b8c971c340adb465/Lab-04/Network%20Scheeme/SW4.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/3f43f201adb5e8b85bb79409a24050f08b74375a/Lab-04/Network%20Scheeme/SW4vrrp.png)
 #### SW5:
 ~~~
 interface Ethernet0/0.7
