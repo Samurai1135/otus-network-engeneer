@@ -15,50 +15,121 @@
 
 - ## Часть 1. Маршрутизаторы R14-R15 находятся в зоне 0 - backbone.
 
-В офисе Чокурдах расположено два объекта в двух разных VLAN'ах: VPC30 и VPC31
-Маршрутизатор  R28 имеет два линка от провайдера, поэтому целесообразно разделить трафик VLAN2(VPC30) и VLAN3(VPС31) между ними.
-Для этого создадим на R28 два Access-List'а с разрешением доступа для наших машин VPC:
+Area 0 - core level
+Area 10 - distribution level
+
+Для уменьшения служебного трафика на R14 и R15 переведем неиспользуемые интерфейсы в пассивный режим (hello-пакеты не будут пересылаться)
+
  ~~~
-ip access-list extended VPC30 //в нашем случае можно использовать и standart access-list (только для IPv4)
- permit ip host 192.168.2.1 any
-ip access-list extended VPC31
- permit ip host 192.168.3.1 any
+router ospf 1
+ router-id 2.2.2.2               //R14 router-id (R15 - 1.1.1.1)
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+!         
  ~~~
-Для распределения трафика между двумя линками настроим карту маршрута:
+Настроим линк между роутерами в нулевой зоне (Area 0) на R14 и R15
 ~~~
-!
-route-map BALLANCE permit 10 
- match ip address VPC30
- set ip next-hop 10.0.0.1 //в сторону R26
-!
-route-map BALLANCE permit 20
- match ip address VPC31
- set ip next-hop 10.0.1.1 //в сторону R25
-!
-~~~
-Таким образом мы получили "пути" для трафика из VLAN2 на маршрутизатор R26, а из VLAN3 на маршрутизатор R25
-
-#### !!! Важно отметить, что для вступления в силу route-map на нужных нам интерфейсах  (в нашем случае eth0/2.2 и eth0/2.3) необходимо выполнить команду:
-~~~
-ip policy route-map BALLANCE
+!         
+interface Ethernet1/0
+ ip address 10.128.150.1 255.255.255.0  //R14
+ ip ospf 1 area 0
+!         
 ~~~
 
-- ## Часть 3. Настройка отслеживания линка через технологию IP SLA.(только для IPv4)
-
-Самым оптимальным решением является проверка состяния линков от провайдера командой PING. 
-Создадим задание для маршрутизатора R28, которое будет "заставлять" маршрутизатор проверять доступность каналов каждые 5 секунд:
-
+- ## Часть 2. Маршрутизаторы R12-R13 находятся в зоне 10. Дополнительно к маршрутам должны получать маршрут по умолчанию.
+Поскольку в зоне 10 у нас находятся 3-х уровневые свичи, настройке ниже так-же должны быть применены к ним:
+(сперва присоединим к зоне 10 R14 и R15)
 ~~~
-ip sla 1 //обозначаем правило SLA
- icmp-echo 10.0.0.1 source-ip 10.0.0.2 //указываем выполняемую команду  ping  и порт, с которого команда должна выполняться
- frequency 5 //задаем периодичность проверки доступности
-ip sla schedule 1 life forever start-time now //выставляем тайминги работы сервиса (работать всегда, запуститься немедленно)
-ip sla 2
- icmp-echo 10.0.1.1 source-ip 10.0.1.2
- frequency 5
-ip sla schedule 2 life forever start-time now
-!
+interface Ethernet0/1          //R14
+ ip address 10.128.21.1 255.255.255.252
+ ip ospf 1 area 10
+! 
 ~~~
+~~~
+!         
+interface Ethernet0/1         //R15
+ ip address 10.128.22.1 255.255.255.252
+ ip ospf 1 area 10
+~~~
+Произведем аналогичные настройки для R12, R13, SW4 и SW5 и проверим установление соседства:
+~~~
+R15#sh ip ospf neighbor 
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+2.2.2.2           1   FULL/DR         00:00:37    10.128.150.1    Ethernet1
+/0
+4.4.4.4           1   FULL/BDR        00:00:35    10.128.22.2     Ethernet0
+/1
+~~~
+~~~
+R14#sh ip ospf neighbor 
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.1           1   FULL/BDR        00:00:34    10.128.150.2    Ethernet1
+/0
+6.6.6.6           1   FULL/BDR        00:00:34    10.128.21.2     Ethernet0
+/1
+~~~
+~~~
+R12#sh ip ospf neighbor 
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+5.5.5.5           1   FULL/BDR        00:00:36    10.128.25.2     Ethernet0
+/0
+3.3.3.3           1   FULL/DR         00:00:38    10.128.25.9     Ethernet0
+/1
+1.1.1.1           1   FULL/DR         00:00:37    10.128.22.1     Ethernet0
+/3
+~~~
+Как видим, соседство установлено. <br>
+# Анонс маршрута по-умолчанию
+
+Нв маршрутизаторе R15 задаем маршрут по-умолчанию:
+~~~
+R15(config)#ip route 0.0.0.0 0.0.0.0 10.8.0.1
+~~~
+И в настройках OSPF вводим команду:
+~~~
+R15(config-router)#default-information originate 
+~~~
+Проверим на R12 появление нового маршрута по-умолчанию:
+~~~
+R12#sh ip route ospf
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
+2
+       ia - IS-IS inter area, * - candidate default, U - per-user static ro
+ute
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.128.22.1 to network 0.0.0.0
+
+O*E2  0.0.0.0/0 [110/1] via 10.128.22.1, 00:01:54, Ethernet0/3
+      10.0.0.0/8 is variably subnetted, 15 subnets, 3 masks
+O        10.128.21.0/30 [110/30] via 10.128.25.9, 00:26:13, Ethernet0/1
+                        [110/30] via 10.128.25.2, 00:26:13, Ethernet0/0
+O        10.128.23.0/30 [110/30] via 10.128.25.9, 00:26:23, Ethernet0/1
+                        [110/30] via 10.128.25.2, 00:26:23, Ethernet0/0
+O        10.128.26.0/30 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
+O        10.128.26.8/30 [110/20] via 10.128.25.2, 00:27:09, Ethernet0/0
+O IA     10.128.150.0/24 [110/20] via 10.128.22.1, 00:22:07, Ethernet0/3
+O        10.128.200.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
+                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
+O        10.128.201.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
+                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
+~~~
+O*E2 - это и есть маршрут по-умолчанию
+
+
+
 Проверим работу нашего задания: <br>
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/4de5fb53ce74a350d14e038d26c05e56d9d30a0c/Lab-05/Screenshots/stat.png)
 
