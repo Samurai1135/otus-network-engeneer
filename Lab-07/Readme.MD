@@ -8,120 +8,72 @@
 - `Часть3:` R24 обозначить в зоне 24.
 - `Часть4:` R26 обозначить в зоне 26
 <br><br>
-#### Схема офиса Москва
+#### Схема зон Триады
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/fb59101fb26dbe6089464be9e75813a90a372cff/Lab-07/screenshots/zones.png)
 
-- ## Часть 1. Маршрутизаторы R14-R15 находятся в зоне 0 - backbone.
+- ## Настройка IS-IS в ISP Триада.
 
-Area 0 - core level <br>
-Area 10 - distribution level
-
-Для уменьшения служебного трафика на R14 и R15 переведем неиспользуемые интерфейсы в пассивный режим (hello-пакеты не будут пересылаться)
-
+На каждом из маршрутизаторов провайдера Триада необходимо настроить протокол ISIS из режима конфигурации:
  ~~~
-router ospf 1
- router-id 2.2.2.2               //R14 router-id (R15 - 1.1.1.1)
- passive-interface default
- no passive-interface Ethernet0/0
- no passive-interface Ethernet0/1
- no passive-interface Ethernet0/3
- no passive-interface Ethernet1/0
-!         
+router isis                     //Включаем протокол ISIS
+net 49.2222.0000.0000.0023.00   //49-приватный адрес, 2222 - зона, 0000.0000.0023 - id роутера, 00 - селектор
  ~~~
-Настроим линк между роутерами в нулевой зоне (Area 0) на R14 и R15
+Далее на каждом из интерфейсов, смотрящих в зоны 2222,24 и 26 включить протокол ISIS:
+
 ~~~
-!         
-interface Ethernet1/0
- ip address 10.128.150.1 255.255.255.0  //R14
- ip ospf 1 area 0
-!         
+R25(config-if)#ip router isis
+~~~ 
+После проведенных настроек нужно убедиться в установлении соседства роутеров.
+Приведем результат команды show isis neighbors:
+~~~
+R23#show isis neighbors
+
+System Id      Type Interface   IP Address      State Holdtime Circuit Id
+R24            L2   Et0/2       10.2.0.2        UP    7        R24.02
+R25            L1   Et0/1       10.3.0.1        UP    8        R25.01
+R25            L2   Et0/1       10.3.0.1        UP    8        R25.01
+~~~
+~~~
+R26#show isis neighbors
+
+System Id      Type Interface   IP Address      State Holdtime Circuit Id
+R24            L2   Et0/0       10.1.0.2        UP    20       R26.01
+R25            L2   Et0/2       10.4.0.2        UP    24       R26.02
 ~~~
 
-- ## Часть 2. Маршрутизаторы R12-R13 находятся в зоне 10. Дополнительно к маршрутам должны получать маршрут по умолчанию.
-Поскольку в зоне 10 у нас находятся 3-х уровневые свичи, настройки ниже так-же должны быть применены к ним:
-(сперва присоединим к зоне 10 R14 и R15)
+Убедившись в установлении соседства необходимо проверить появление путей (маршрутов):
 ~~~
-interface Ethernet0/1          //R14
- ip address 10.128.21.1 255.255.255.252
- ip ospf 1 area 10
-! 
+R26#show ip route isis
+          (опущены информационные строки)
+      10.0.0.0/8 is variably subnetted, 11 subnets, 2 masks
+i L2     10.0.3.0/30 [115/20] via 10.4.0.2, 01:19:23, Ethernet0/2
+i L2     10.2.0.0/30 [115/20] via 10.1.0.2, 01:19:23, Ethernet0/0
+i L2     10.3.0.0/30 [115/20] via 10.4.0.2, 01:19:23, Ethernet0/2
 ~~~
 ~~~
-!         
-interface Ethernet0/1         //R15
- ip address 10.128.22.1 255.255.255.252
- ip ospf 1 area 10
-~~~
-Произведем аналогичные настройки для R12, R13, SW4 и SW5 и проверим установление соседства:
-~~~
-R15#sh ip ospf neighbor 
+R23#show ip route isis
+        (опущены информационные строки)
+Gateway of last resort is not set
 
-Neighbor ID     Pri   State           Dead Time   Address         Interface
-2.2.2.2           1   FULL/DR         00:00:37    10.128.150.1    Ethernet1
-/0
-4.4.4.4           1   FULL/BDR        00:00:35    10.128.22.2     Ethernet0
-/1
+      10.0.0.0/8 is variably subnetted, 9 subnets, 2 masks
+i L1     10.0.3.0/30 [115/20] via 10.3.0.1, 01:21:32, Ethernet0/1
+i L2     10.1.0.0/30 [115/20] via 10.2.0.2, 01:20:40, Ethernet0/2
+i L1     10.4.0.0/30 [115/20] via 10.3.0.1, 01:21:32, Ethernet0/1
 ~~~
-~~~
-R14#sh ip ospf neighbor 
 
-Neighbor ID     Pri   State           Dead Time   Address         Interface
-1.1.1.1           1   FULL/BDR        00:00:34    10.128.150.2    Ethernet1
-/0
-6.6.6.6           1   FULL/BDR        00:00:34    10.128.21.2     Ethernet0
-/1
+Если взглянуть на топологию ISIS на примере R23 - можно обратить внимание на разделение LSDB для L1(соседи внутри зоны) и L2(соседи из других зон) связей:
 ~~~
-~~~
-R12#sh ip ospf neighbor 
+R23#show isis topology
 
-Neighbor ID     Pri   State           Dead Time   Address         Interface
-5.5.5.5           1   FULL/BDR        00:00:36    10.128.25.2     Ethernet0
-/0
-3.3.3.3           1   FULL/DR         00:00:38    10.128.25.9     Ethernet0
-/1
-1.1.1.1           1   FULL/DR         00:00:37    10.128.22.1     Ethernet0
-/3
-~~~
-Как видим, соседство установлено. <br>
-#### Анонс маршрута по-умолчанию
+IS-IS TID 0 paths to level-1 routers
+System Id            Metric     Next-Hop             Interface   SNPA
+R23                  --
+R25                  10         R25                  Et0/1       aabb.cc01.9000
 
-На маршрутизаторе R15 задаем маршрут по-умолчанию:
-~~~
-R15(config)#ip route 0.0.0.0 0.0.0.0 10.8.0.1
-~~~
-И в настройках OSPF вводим команду:
-~~~
-R15(config-router)#default-information originate 
-~~~
-Проверим на R12 появление нового маршрута по-умолчанию:
-~~~
-R12#sh ip route ospf
-Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static ro
-ute
-       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-       a - application route
-       + - replicated route, % - next hop override
-
-Gateway of last resort is 10.128.22.1 to network 0.0.0.0
-
-O*E2  0.0.0.0/0 [110/1] via 10.128.22.1, 00:01:54, Ethernet0/3
-      10.0.0.0/8 is variably subnetted, 15 subnets, 3 masks
-O        10.128.21.0/30 [110/30] via 10.128.25.9, 00:26:13, Ethernet0/1
-                        [110/30] via 10.128.25.2, 00:26:13, Ethernet0/0
-O        10.128.23.0/30 [110/30] via 10.128.25.9, 00:26:23, Ethernet0/1
-                        [110/30] via 10.128.25.2, 00:26:23, Ethernet0/0
-O        10.128.26.0/30 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-O        10.128.26.8/30 [110/20] via 10.128.25.2, 00:27:09, Ethernet0/0
-O IA     10.128.150.0/24 [110/20] via 10.128.22.1, 00:22:07, Ethernet0/3
-O        10.128.200.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
-O        10.128.201.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
-~~~
-O*E2 - это и есть маршрут по-умолчанию
+IS-IS TID 0 paths to level-2 routers
+System Id            Metric     Next-Hop             Interface   SNPA
+R23                  --
+R24                  10         R24                  Et0/2       aabb.cc01.8020
+R25                  10         R25                  Et0/1       aabb.cc01.9000
+R26                  20         R24                  Et0/2       aabb.cc01.8020
+                                R25                  Et0/1       aabb.cc01.9000~~~
