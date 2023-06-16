@@ -76,4 +76,6 @@ R23                  --
 R24                  10         R24                  Et0/2       aabb.cc01.8020
 R25                  10         R25                  Et0/1       aabb.cc01.9000
 R26                  20         R24                  Et0/2       aabb.cc01.8020
-                                R25                  Et0/1       aabb.cc01.9000~~~
+                                R25                  Et0/1       aabb.cc01.9000
+                   
+~~~
