@@ -62,7 +62,7 @@ redundancy
 !
 interface Loopback0
  no shutdown
- ip address 100.0.1.9 255.255.255.255
+ ip address 10.128.254.15 255.255.255.255
 !
 interface Ethernet0/0
  no shutdown
@@ -85,7 +85,7 @@ interface Ethernet0/3
 !
 interface Ethernet1/0
  no shutdown
- ip address 10.128.150.2 255.255.255.0
+ ip address 10.128.150.2 255.255.255.252
  ip ospf 1 area 0
 !
 interface Ethernet1/1
@@ -104,7 +104,7 @@ interface Ethernet1/3
  shutdown
 !
 router ospf 1
- router-id 1.1.1.1
+ router-id 10.128.254.15
  area 102 filter-list prefix Block101 in
  passive-interface default
  no passive-interface Ethernet0/0
@@ -119,7 +119,7 @@ ip forward-protocol nd
 no ip http server
 no ip http secure-server
 ip route 0.0.0.0 0.0.0.0 10.8.0.1
-ip route 100.0.1.18 255.255.255.255 10.128.31.2
+ip route 10.128.254.22 255.255.255.255 10.128.31.2
 !
 !
 ip prefix-list Block101 seq 5 deny 10.128.30.0/30
