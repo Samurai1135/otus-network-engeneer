@@ -255,7 +255,7 @@ ip prefix-list Block101 seq 100 permit 0.0.0.0/0 le 32
 
 ~~~
 router ospf 1
- router-id 1.1.1.1
+ router-id 10.128.254.19
  area 102 filter-list prefix Block101 in
 ~~~
 В зону 102 должны поступать все маршруты за исключением маршрута к R19 в зону 101, проверим:
