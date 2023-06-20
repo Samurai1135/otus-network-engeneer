@@ -11,7 +11,7 @@
 - `Часть4:` Маршрутизатор R20 находится в зоне 102 и получает все маршруты, кроме маршрутов до сетей зоны 101.
 <br><br>
 #### Схема офиса Москва
-![](https://github.com/Samurai1135/otus-network-engeneer/blob/85d1767c530c643491340105688876f95122c6ef/Lab-06/ScreenShots/stand.png)
+![](https://github.com/Samurai1135/otus-network-engeneer/blob/f631617e9b257b38fd1133d5dd859602c6dbb52d/Lab-06/ScreenShots/Scheem.png)
 
 - ## Часть 1. Маршрутизаторы R14-R15 находятся в зоне 0 - backbone.
 
@@ -22,7 +22,7 @@ Area 10 - distribution level
 
  ~~~
 router ospf 1
- router-id 2.2.2.2               //R14 router-id (R15 - 1.1.1.1)
+ router-id 10.128.254.14              //R14 router-id (R15 - 10.128.254.15)
  passive-interface default
  no passive-interface Ethernet0/0
  no passive-interface Ethernet0/1
