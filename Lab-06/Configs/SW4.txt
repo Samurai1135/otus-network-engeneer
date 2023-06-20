@@ -64,7 +64,7 @@ redundancy
 !
 interface Loopback0
  no shutdown
- ip address 100.0.1.15 255.255.255.255
+ ip address 10.128.254.21 255.255.255.255
 !
 interface Ethernet0/0
  no shutdown
@@ -118,7 +118,7 @@ interface Ethernet1/3
  no ip address
 !
 router ospf 1
- router-id 5.5.5.5
+ router-id 10.128.254.21
 !
 ip forward-protocol nd
 !
