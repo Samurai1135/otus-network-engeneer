@@ -56,33 +56,31 @@ interface Ethernet0/1         //R15
 ~~~
 Произведем аналогичные настройки для R12, R13, SW4 и SW5 и проверим установление соседства:
 ~~~
-R15#sh ip ospf neighbor 
+R15#sh ip ospf neighbor
 
 Neighbor ID     Pri   State           Dead Time   Address         Interface
-2.2.2.2           1   FULL/DR         00:00:37    10.128.150.1    Ethernet1
-/0
-4.4.4.4           1   FULL/BDR        00:00:35    10.128.22.2     Ethernet0
-/1
+10.128.254.14     1   FULL/BDR        00:00:37    10.128.150.1    Ethernet1/0
+10.128.254.12     1   FULL/BDR        00:00:38    10.128.22.2     Ethernet0/1
+10.128.254.13     1   FULL/BDR        00:00:37    10.128.23.2     Ethernet0/0
+10.128.254.20     1   FULL/DR         00:00:33    10.128.31.2     Ethernet0/3
 ~~~
 ~~~
-R14#sh ip ospf neighbor 
+R14#sh ip ospf neighbor
 
 Neighbor ID     Pri   State           Dead Time   Address         Interface
-1.1.1.1           1   FULL/BDR        00:00:34    10.128.150.2    Ethernet1
-/0
-6.6.6.6           1   FULL/BDR        00:00:34    10.128.21.2     Ethernet0
-/1
+10.128.254.15     1   FULL/DR         00:00:33    10.128.150.2    Ethernet1/0
+10.128.254.13     1   FULL/BDR        00:00:39    10.128.21.2     Ethernet0/1
+10.128.254.12     1   FULL/BDR        00:00:34    10.128.20.2     Ethernet0/0
+10.128.254.19     1   FULL/DR         00:00:31    10.128.30.2     Ethernet0/3
 ~~~
 ~~~
-R12#sh ip ospf neighbor 
+R12#sh ip ospf neighbor
 
 Neighbor ID     Pri   State           Dead Time   Address         Interface
-5.5.5.5           1   FULL/BDR        00:00:36    10.128.25.2     Ethernet0
-/0
-3.3.3.3           1   FULL/DR         00:00:38    10.128.25.9     Ethernet0
-/1
-1.1.1.1           1   FULL/DR         00:00:37    10.128.22.1     Ethernet0
-/3
+10.128.254.15     1   FULL/DR         00:00:37    10.128.22.1     Ethernet0/3
+10.128.254.14     1   FULL/DR         00:00:37    10.128.20.1     Ethernet0/2
+10.128.254.22     1   FULL/DR         00:00:38    10.128.25.9     Ethernet0/1
+10.128.254.21     1   FULL/DR         00:00:31    10.128.25.2     Ethernet0/0
 ~~~
 Как видим, соседство установлено. <br>
 #### Анонс маршрута по-умолчанию
@@ -99,32 +97,31 @@ R15(config-router)#default-information originate
 ~~~
 R12#sh ip route ospf
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
        E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static ro
-ute
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
        o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
        a - application route
        + - replicated route, % - next hop override
 
 Gateway of last resort is 10.128.22.1 to network 0.0.0.0
 
-O*E2  0.0.0.0/0 [110/1] via 10.128.22.1, 00:01:54, Ethernet0/3
-      10.0.0.0/8 is variably subnetted, 15 subnets, 3 masks
-O        10.128.21.0/30 [110/30] via 10.128.25.9, 00:26:13, Ethernet0/1
-                        [110/30] via 10.128.25.2, 00:26:13, Ethernet0/0
-O        10.128.23.0/30 [110/30] via 10.128.25.9, 00:26:23, Ethernet0/1
-                        [110/30] via 10.128.25.2, 00:26:23, Ethernet0/0
-O        10.128.26.0/30 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-O        10.128.26.8/30 [110/20] via 10.128.25.2, 00:27:09, Ethernet0/0
-O IA     10.128.150.0/24 [110/20] via 10.128.22.1, 00:22:07, Ethernet0/3
-O        10.128.200.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
-O        10.128.201.0/24 [110/20] via 10.128.25.9, 00:28:13, Ethernet0/1
-                         [110/20] via 10.128.25.2, 00:26:59, Ethernet0/0
+O*E2  0.0.0.0/0 [110/1] via 10.128.22.1, 00:07:18, Ethernet0/3
+      10.0.0.0/8 is variably subnetted, 18 subnets, 3 masks
+O        10.128.21.0/30 [110/20] via 10.128.20.1, 00:07:18, Ethernet0/2
+O        10.128.23.0/30 [110/20] via 10.128.22.1, 00:07:18, Ethernet0/3
+O        10.128.26.0/30 [110/20] via 10.128.25.9, 00:07:28, Ethernet0/1
+O        10.128.26.8/30 [110/20] via 10.128.25.2, 00:07:18, Ethernet0/0
+O IA     10.128.30.0/30 [110/20] via 10.128.20.1, 00:07:18, Ethernet0/2
+O IA     10.128.31.0/30 [110/20] via 10.128.22.1, 00:07:18, Ethernet0/3
+O IA     10.128.150.0/30 [110/20] via 10.128.22.1, 00:07:18, Ethernet0/3
+                         [110/20] via 10.128.20.1, 00:07:18, Ethernet0/2
+O        10.128.200.0/24 [110/20] via 10.128.25.9, 00:07:28, Ethernet0/1
+                         [110/20] via 10.128.25.2, 00:07:18, Ethernet0/0
+O        10.128.201.0/24 [110/20] via 10.128.25.9, 00:07:28, Ethernet0/1
+                         [110/20] via 10.128.25.2, 00:07:18, Ethernet0/0
 ~~~
 O*E2 - это и есть маршрут по-умолчанию
 
@@ -177,25 +174,24 @@ R19(config-router)#area 101 stub no-summary
 Потом выведем все доступные на R19 маршруты:
 
 ~~~
-R19#sh ip route     
+R19#sh ip route
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
        E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-
-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static ro
-ute
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
        o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
        a - application route
        + - replicated route, % - next hop override
 
 Gateway of last resort is 10.128.30.1 to network 0.0.0.0
 
-O*IA  0.0.0.0/0 [110/11] via 10.128.30.1, 00:00:44, Ethernet0/0
-      10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+O*IA  0.0.0.0/0 [110/11] via 10.128.30.1, 00:08:40, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 3 subnets, 2 masks
 C        10.128.30.0/30 is directly connected, Ethernet0/0
 L        10.128.30.2/32 is directly connected, Ethernet0/0
+C        10.128.254.19/32 is directly connected, Loopback0
 ~~~
 Все маршруты пропали, кроме маршрута по-умолчанию. <br><br>
 
@@ -265,8 +261,9 @@ router ospf 1
 В зону 102 должны поступать все маршруты за исключением маршрута к R19 в зону 101, проверим:
 ~~~
 R20#sh ip route
+R20#sh ip route
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
        N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
        E1 - OSPF external type 1, E2 - OSPF external type 2
        i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
@@ -277,23 +274,22 @@ Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
 
 Gateway of last resort is 10.128.31.1 to network 0.0.0.0
 
-O*E2  0.0.0.0/0 [110/1] via 10.128.31.1, 01:09:08, Ethernet0/0
-      10.0.0.0/8 is variably subnetted, 13 subnets, 3 masks
-O IA     10.128.20.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.21.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.22.0/30 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.23.0/30 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.25.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.25.8/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.26.0/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.26.8/30 [110/30] via 10.128.31.1, 00:00:30, Ethernet0/0
+O*E2  0.0.0.0/0 [110/1] via 10.128.31.1, 00:09:38, Ethernet0/0
+      10.0.0.0/8 is variably subnetted, 14 subnets, 3 masks
+O IA     10.128.20.0/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.21.0/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.22.0/30 [110/20] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.23.0/30 [110/20] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.25.0/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.25.8/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.26.0/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.26.8/30 [110/30] via 10.128.31.1, 00:09:38, Ethernet0/0
 C        10.128.31.0/30 is directly connected, Ethernet0/0
 L        10.128.31.2/32 is directly connected, Ethernet0/0
-O IA     10.128.150.0/24 [110/20] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.200.0/24 [110/40] via 10.128.31.1, 00:00:30, Ethernet0/0
-O IA     10.128.201.0/24 [110/40] via 10.128.31.1, 00:00:30, Ethernet0/0
-      100.0.0.0/32 is subnetted, 1 subnets
-C        100.0.1.18 is directly connected, Loopback0
+O IA     10.128.150.0/30 [110/20] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.200.0/24 [110/40] via 10.128.31.1, 00:09:38, Ethernet0/0
+O IA     10.128.201.0/24 [110/40] via 10.128.31.1, 00:09:38, Ethernet0/0
+C        10.128.254.20/32 is directly connected, Loopback0
 ~~~
 Подсеть 10.128.30.0/30 пропала, следовательно фильтрация работает!
 
