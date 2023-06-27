@@ -115,7 +115,7 @@ Gateway of last resort is 10.128.2.1 to network 0.0.0.0
 D*EX  0.0.0.0/0 [170/1536000] via 10.128.2.1, 03:01:56, Ethernet0/1
       10.0.0.0/8 is variably subnetted, 16 subnets, 3 masks
 ~~~
-Либо через суммаризацию всех маршрутов на интерфейсе eth0/3 маршрутизатора R16:
+Либо через <b>суммаризацию</b> всех маршрутов на интерфейсе eth0/3 маршрутизатора R16:
 ~~~
 R16(config)#router eigrp SPB
 R16(config-router)#address-family ipv4 unicast autonomous-system 2042
