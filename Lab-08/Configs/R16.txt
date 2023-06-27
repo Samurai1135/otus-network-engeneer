@@ -1,0 +1,129 @@
+
+!
+! Last configuration change at 10:20:09 UTC Tue Jun 27 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R16
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.128.254.16 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.1.10 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.2.2 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.128.1.1 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 10.128.4.1 255.255.255.252
+!
+!
+router eigrp SPB
+ !
+ address-family ipv4 unicast autonomous-system 2042
+  !
+  af-interface Ethernet0/3
+   summary-address 10.128.0.0 255.255.248.0
+  exit-af-interface
+  !
+  topology base
+  exit-af-topology
+  network 10.128.1.0 0.0.0.3
+  network 10.128.1.8 0.0.0.3
+  network 10.128.2.0 0.0.0.3
+  network 10.128.4.0 0.0.0.3
+  eigrp router-id 10.128.254.16
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

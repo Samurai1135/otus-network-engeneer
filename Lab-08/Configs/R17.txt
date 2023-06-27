@@ -1,0 +1,125 @@
+
+!
+! Last configuration change at 06:53:48 UTC Tue Jun 27 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R17
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.128.254.17 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.2.10 255.255.255.252
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.0.2 255.255.255.252
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.128.0.10 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+!
+router eigrp SPB
+ !
+ address-family ipv4 unicast autonomous-system 2042
+  !
+  topology base
+  exit-af-topology
+  network 10.128.0.0 0.0.0.3
+  network 10.128.0.8 0.0.0.3
+  network 10.128.2.8 0.0.0.3
+  eigrp router-id 10.128.254.17
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
