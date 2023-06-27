@@ -89,7 +89,47 @@ D        10.128.254.32/32 [90/1024640] via 10.128.4.2, 02:06:58, Ethernet0/3
 D     192.168.4.0/24 [90/1536000] via 10.128.1.2, 02:06:51, Ethernet0/2
 D     192.168.5.0/24 [90/1536000] via 10.128.1.9, 02:06:49, Ethernet0/0
 ~~~
+## R32 получает только маршрут по умолчанию
+Маршрут по-умолчанию можно задать через редистрибьюцию:
+~~~
+router eigrp SPB
+ !
+ address-family ipv4 unicast autonomous-system 2042
+  !
+  topology base
+   redistribute static
+  exit-af-topology
+~~~
+После выполнения команды на всех нижних маршрутизаторах появятся дефолтные маршруты:
+~~~
+R17#sh ip route
+Gateway of last resort is 10.128.0.1 to network 0.0.0.0
 
+D*EX  0.0.0.0/0 [170/1536000] via 10.128.0.1, 03:01:09, Ethernet0/1
+      10.0.0.0/8 is variably subnetted, 15 subnets, 3 masks
+~~~
+~~~
+R16#sh ip route
+Gateway of last resort is 10.128.2.1 to network 0.0.0.0
+
+D*EX  0.0.0.0/0 [170/1536000] via 10.128.2.1, 03:01:56, Ethernet0/1
+      10.0.0.0/8 is variably subnetted, 16 subnets, 3 masks
+~~~
+Либо через суммаризацию всех маршрутов на интерфейсе eth0/3 маршрутизатора R16:
+~~~
+R16(config)#router eigrp SPB
+R16(config-router)#address-family ipv4 unicast autonomous-system 2042
+R16(config-router-af)#af-interface Ethernet 0/3
+R16(config-router-af-interface)#summary-address 0.0.0.0 0.0.0.0
+R16(config-router-af-interface)#exit
+R16(config-router-af)#exit
+~~~
+На R32 появится маршрут по-умолчанию:
+~~~
+R32#sh ip route
+Gateway of last resort is 10.128.4.1 to network 0.0.0.0
+D*  0.0.0.0/0 [170/2048000] via 10.128.4.1, 03:04:05, Ethernet0/0
+~~~
 ## R16-17 анонсируют только суммарные префиксы.
 По-умолчанию автосуммаризация выключена.  
 Произведем суммаризацию нескольких подсетей с R16 и R17 смаской /30 в единую подсеть с маской /21 на R18.
