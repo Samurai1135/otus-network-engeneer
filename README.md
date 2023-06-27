@@ -22,5 +22,5 @@
 > [Lab-04](https://github.com/Samurai1135/otus-network-engeneer/blob/f9ea9051291c1421ffda7c2a5917ab094fb36607/Lab-04/Readme.md) <br>
 > [Lab-05](https://github.com/Samurai1135/otus-network-engeneer/blob/70a824bbf65bce7ef97924e6042452dd9b19b8da/Lab-05/README.MD) <br>
 > [Lab-06](https://github.com/Samurai1135/otus-network-engeneer/tree/6aed217666817272a0500e9cdde6000431ae43d7/Lab-06) <br>
-> [Lab-07](https://github.com/Samurai1135/otus-network-engeneer/blob/506711a86d95908ee251d04df4c34e9029f1925b/Lab-07/Readme.MD)
+> [Lab-07](https://github.com/Samurai1135/otus-network-engeneer/blob/506711a86d95908ee251d04df4c34e9029f1925b/Lab-07/Readme.MD)  
 > [Lab-08](https://github.com/Samurai1135/otus-network-engeneer/tree/78f4ed463bd7154c9da02a603e3581e036891005/Lab-08)  
