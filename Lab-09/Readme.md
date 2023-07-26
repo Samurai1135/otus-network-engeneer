@@ -64,3 +64,47 @@ router bgp 301
  exit-address-family
 !
 ~~~
+## Проверка GBP-связности между пограничными маршрутизаторами R15-R18
+
+Проверим марштруты со стороны Москвы:
+~~~
+R14#sh ip bgp
+BGP table version is 4, local router ID is 10.128.254.14
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  10.128.254.14/32 0.0.0.0                  0         32768 i
+ *>  10.128.254.18/32 10.7.0.1                               0 101 301 520 2042 i
+~~~
+~~~
+R15#sh ip bgp
+BGP table version is 5, local router ID is 10.128.254.15
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  10.128.254.15/32 0.0.0.0                  0         32768 i
+ *>  10.128.254.18/32 10.8.0.1                               0 301 520 2042 i
+~~~
+Проверим марштруты со стороны Питера:
+~~~
+R18#sh ip bgp
+BGP table version is 6, local router ID is 10.128.254.18
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  10.128.254.14/32 10.0.4.1                               0 520 301 101 1001 i
+ *>  10.128.254.15/32 10.0.4.1                               0 520 301 1001 i
+ *>  10.128.254.18/32 0.0.0.0                  0         32768 i
+~~~
