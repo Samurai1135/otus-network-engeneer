@@ -24,3 +24,4 @@
 > [Lab-06](https://github.com/Samurai1135/otus-network-engeneer/tree/6aed217666817272a0500e9cdde6000431ae43d7/Lab-06) - OSPF Filtering<br>
 > [Lab-07](https://github.com/Samurai1135/otus-network-engeneer/blob/506711a86d95908ee251d04df4c34e9029f1925b/Lab-07/Readme.MD) - IS-IS  
 > [Lab-08](https://github.com/Samurai1135/otus-network-engeneer/tree/78f4ed463bd7154c9da02a603e3581e036891005/Lab-08)  - EIGRP
+> [Lab-09](https://github.com/Samurai1135/otus-network-engeneer/tree/78f4ed463bd7154c9da02a603e3581e036891005/Lab-08) - BGP. Основы
