@@ -109,3 +109,45 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>  10.128.254.15/32 10.0.4.1                               0 520 301 1001 i
  *>  10.128.254.18/32 0.0.0.0                  0         32768 i
 ~~~
+
+#### Пропингуем бордеры между собой
+Следует понимать, что осуществляя пинг необходимо указывать источник (source), т.к. в таблицах маршрутизации нет записей о местонахождении роутеров R15 (IPv4:10.8.0.2) и R18 (IPv4:10.0.4.2)  
+Пингуем Питер со стороны Москвы:
+~~~
+R15#ping 10.128.254.18
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.128.254.18, timeout is 2 seconds:
+.....
+Success rate is 0 percent (0/5)
+R15#ping 10.128.254.18 source 10.128.254.15
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.128.254.18, timeout is 2 seconds:
+Packet sent with a source address of 10.128.254.15
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+~~~
+~~~
+R14#ping 10.128.254.18 source 10.128.254.14
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.128.254.18, timeout is 2 seconds:
+Packet sent with a source address of 10.128.254.14
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+~~~
+Теперь пропингуем Москву со стороны Питера:
+~~~
+R18#ping 10.128.254.15 source 10.128.254.18
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.128.254.15, timeout is 2 seconds:
+Packet sent with a source address of 10.128.254.18
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+R18#ping 10.128.254.14 source 10.128.254.18
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.128.254.14, timeout is 2 seconds:
+Packet sent with a source address of 10.128.254.18
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
+~~~
+
+## Связность установлена!
