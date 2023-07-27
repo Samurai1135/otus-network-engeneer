@@ -134,7 +134,7 @@ router bgp 520
  neighbor 10.128.254.26 route-reflector-client
 !
 ~~~
-Как видно, каждому соседу добавили параметр `route-reflector-client`
+Как видно, каждому соседу добавили параметр `route-reflector-client`.  
 На соседних роутерах укажем R23 (Lo0:10.128.254.23) как `next-hop-self`:
 ~~~
 router bgp 520
