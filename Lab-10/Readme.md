@@ -300,3 +300,41 @@ R22#sh ip bgp
 ~~~
 
 ## Необходимо обеспечить IP-связность всех сетей
+Осуществим пинг с VPC1  до VPC и VPC8
+~~~
+VPCS> ping 192.168.5.1
+
+84 bytes from 192.168.5.1 icmp_seq=1 ttl=56 time=1.817 ms
+84 bytes from 192.168.5.1 icmp_seq=2 ttl=56 time=1.406 ms
+84 bytes from 192.168.5.1 icmp_seq=3 ttl=56 time=1.307 ms
+84 bytes from 192.168.5.1 icmp_seq=4 ttl=56 time=1.505 ms
+84 bytes from 192.168.5.1 icmp_seq=5 ttl=56 time=1.462 ms
+
+VPCS> ping 192.168.4.1
+
+84 bytes from 192.168.4.1 icmp_seq=1 ttl=56 time=2.770 ms
+84 bytes from 192.168.4.1 icmp_seq=2 ttl=56 time=1.558 ms
+84 bytes from 192.168.4.1 icmp_seq=3 ttl=56 time=1.486 ms
+84 bytes from 192.168.4.1 icmp_seq=4 ttl=56 time=1.478 ms
+84 bytes from 192.168.4.1 icmp_seq=5 ttl=56 time=1.414 ms
+~~~
+И с VPC8 пропингуем VPC1 и VPC7
+~~~
+VPCS> ping 192.168.6.1
+
+84 bytes from 192.168.6.1 icmp_seq=1 ttl=56 time=1.485 ms
+84 bytes from 192.168.6.1 icmp_seq=2 ttl=56 time=2.755 ms
+84 bytes from 192.168.6.1 icmp_seq=3 ttl=56 time=1.649 ms
+84 bytes from 192.168.6.1 icmp_seq=4 ttl=56 time=1.502 ms
+84 bytes from 192.168.6.1 icmp_seq=5 ttl=56 time=1.641 ms
+
+VPCS> ping 192.168.7.1
+
+84 bytes from 192.168.7.1 icmp_seq=1 ttl=56 time=2.681 ms
+84 bytes from 192.168.7.1 icmp_seq=2 ttl=56 time=1.503 ms
+84 bytes from 192.168.7.1 icmp_seq=3 ttl=56 time=1.568 ms
+84 bytes from 192.168.7.1 icmp_seq=4 ttl=56 time=1.602 ms
+84 bytes from 192.168.7.1 icmp_seq=5 ttl=56 time=1.598 ms
+~~~
+
+## Цель достигнута!
