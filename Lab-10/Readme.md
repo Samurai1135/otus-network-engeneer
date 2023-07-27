@@ -67,3 +67,40 @@ Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State
 10.8.0.1        4          301      38      37        4    0    0 00:29:59        1
 10.128.254.14   4         1001      10       9        4    0    0 00:03:16        1
 ~~~
+## Настройка iBGP в Триаде
+Произведем полную настройку BGP аналогично офису в Москве и проверим результаты установки BGP-соединения между роутерами:
+~~~
+Router#sh ip bgp summary
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.128.254.24   4          520       0       0        1    0    0 never    Idle
+10.128.254.25   4          520       0       0        1    0    0 never    Idle
+10.128.254.26   4          520       0       0        1    0    0 never    Idle
+~~~
+~~~
+R24#sh ip bgp summary
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.0.4.2        4         2042      47      47        5    0    0 00:38:10        1
+10.6.0.2        4          301      48      47        5    0    0 00:38:10        2
+10.128.254.23   4          520       0       0        1    0    0 never    Idle
+10.128.254.25   4          520       0       0        1    0    0 never    Idle
+10.128.254.26   4          520       0       0        1    0    0 never    Idle
+~~~
+~~~
+Router#sh ip bgp summary
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.128.254.23   4          520       0       0        1    0    0 never    Idle
+10.128.254.24   4          520       0       0        1    0    0 never    Idle
+10.128.254.26   4          520       0       0        1    0    0 never    Idle
+~~~
+~~~
+R26#sh ip bgp summary
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.0.2.2        4         2042      51      49        2    0    0 00:42:00        1
+10.128.254.23   4          520       0       0        1    0    0 never    Idle
+10.128.254.24   4          520       0       0        1    0    0 never    Idle
+10.128.254.25   4          520       0       0        1    0    0 never    Idle
+~~~
