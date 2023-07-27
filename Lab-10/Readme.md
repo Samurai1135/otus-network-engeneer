@@ -25,3 +25,4 @@ router bgp 1001
  neighbor 10.128.254.15 remote-as 1001
  neighbor 10.128.254.15 update-source Loopback0
 ~~~
+## Настройка iBGP в офисе Москвы между маршрутизаторами R14 и R15
