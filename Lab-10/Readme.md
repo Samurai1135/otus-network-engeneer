@@ -40,3 +40,11 @@ R15(config-if)#ip ospf 1 area 0
 R15(config-if)#exit
 ~~~
 Установим BGP-соседство указав update-source Loopback0 для установки соединения через Loopbaсk'и:
+~~~
+R14(config)#router bgp 1001
+R14(config-router)#neighbor 10.128.254.15 update-source Loopback0
+~~~
+~~~
+R15(config)#router bgp 1001
+R15(config-router)#neighbor 10.128.254.14 update-source Loopback0
+~~~
