@@ -25,3 +25,4 @@
 > [Lab-07](https://github.com/Samurai1135/otus-network-engeneer/blob/506711a86d95908ee251d04df4c34e9029f1925b/Lab-07/Readme.MD) - IS-IS  
 > [Lab-08](https://github.com/Samurai1135/otus-network-engeneer/tree/78f4ed463bd7154c9da02a603e3581e036891005/Lab-08)  - EIGRP  
 > [Lab-09](https://github.com/Samurai1135/otus-network-engeneer/tree/27691fb556876464d8c2e23c04ef0adfb2e8117c/Lab-09) - BGP. Основы
+> [Lab-10](https://github.com/Samurai1135/otus-network-engeneer/tree/8cc3d508abd7b323d364e4eeb2d5662830135ef7/Lab-10) - iBGP
