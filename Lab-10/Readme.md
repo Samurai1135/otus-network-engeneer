@@ -268,3 +268,27 @@ route-map AS-PREP permit 10
 ~~~
 neighbor 101.0.0.22 route-map AS-PREP out
 ~~~
+Смотрим на изменения в выбранных путях (самые короткие через ЛАМАС)
+~~~
+R22#sh ip bgp
+BGP table version is 11, local router ID is 10.7.0.1
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *   10.128.254.14/32 10.9.0.1                               0 301 1001 i
+ *>                   10.7.0.2                 0             0 1001 i
+ *   10.128.254.15/32 10.9.0.1                               0 301 1001 i
+ *>                   10.7.0.2                               0 1001 i
+ *   10.128.254.18/32 10.7.0.2                               0 1001 301 520 2042 i
+ *>                   10.9.0.1                               0 301 520 2042 i
+ *   10.128.254.21/32 10.7.0.2                               0 1001 301 i
+ *>                   10.9.0.1                 0             0 301 i
+ *>  10.128.254.22/32 0.0.0.0                  0         32768 i
+ *   192.168.4.0/23   10.7.0.2                               0 1001 301 520 2042 i
+ *>                   10.9.0.1                               0 301 520 2042 i
+ *   192.168.6.0/23   10.9.0.1                               0 301 1001 i
+~~~
