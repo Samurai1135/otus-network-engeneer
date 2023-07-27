@@ -147,14 +147,63 @@ router bgp 520
 ~~~
 После проделанных манипуляций таблицы BGP синхронизируются:
 ~~~
+R24#sh ip bgp
+BGP table version is 4, local router ID is 10.128.254.24
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  10.128.254.14/32 10.6.0.2                               0 301 1001 i
+ *>  10.128.254.15/32 10.6.0.2                               0 301 1001 i
+ * i 10.128.254.18/32 10.128.254.26            0    100      0 2042 i
+ *>                   10.0.4.2                 0             0 2042 i
+~~~
+~~~
+R23#sh ip bgp
+BGP table version is 1, local router ID is 10.128.254.23
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ * i 10.128.254.14/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.15/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.18/32 10.0.2.2                 0    100      0 2042 i
+ * i                  10.0.4.2                 0    100      0 2042 i
 
 ~~~
 ~~~
+R25#sh ip bgp
+BGP table version is 1, local router ID is 10.128.254.25
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
 
+     Network          Next Hop            Metric LocPrf Weight Path
+ * i 10.128.254.14/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.15/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.18/32 10.0.2.2                 0    100      0 2042 i
+ * i                  10.0.4.2                 0    100      0 2042 i
 ~~~
 ~~~
+R26#sh ip bgp
+BGP table version is 2, local router ID is 10.128.254.26
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
 
-~~~
-~~~
-
+     Network          Next Hop            Metric LocPrf Weight Path
+ * i 10.128.254.14/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.15/32 10.6.0.2                 0    100      0 301 1001 i
+ * i 10.128.254.18/32 10.0.4.2                 0    100      0 2042 i
+ *>                   10.0.2.2                 0             0 2042 i
 ~~~
