@@ -48,3 +48,22 @@ R14(config-router)#neighbor 10.128.254.15 update-source Loopback0
 R15(config)#router bgp 1001
 R15(config-router)#neighbor 10.128.254.14 update-source Loopback0
 ~~~
+
+Проверим установку BGP-соединения:
+~~~
+R15#sh ip bgp summary
+BGP router identifier 10.128.254.15, local AS number 1001
+BGP table version is 4, main routing table version 4
+3 network entries using 420 bytes of memory
+3 path entries using 240 bytes of memory
+3/3 BGP path/bestpath attribute entries using 432 bytes of memory
+1 BGP AS-PATH entries using 24 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 1116 total bytes of memory
+BGP activity 3/0 prefixes, 4/1 paths, scan interval 60 secs
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+10.8.0.1        4          301      38      37        4    0    0 00:29:59        1
+10.128.254.14   4         1001      10       9        4    0    0 00:03:16        1
+~~~
