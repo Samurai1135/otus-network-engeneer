@@ -116,3 +116,32 @@ R23(config-router)#neighbor 10.128.254.24 peer-group triada
 R23(config-router)#neighbor 10.128.254.25 peer-group triada
 R23(config-router)#neighbor 10.128.254.26 peer-group triada
 ~~~
+## Настройка Route-Reflector
+RouteReflector - маршрутизатор, который забирает в пределах зоны на себя весь трафик, рефлектирует обновленияи подставляет свой IP.
+В качестве такого маршрутизатора выберем R23 и произведем настройку:
+~~~
+!
+router bgp 520
+ bgp log-neighbor-changes
+ neighbor 10.128.254.24 remote-as 520
+ neighbor 10.128.254.24 update-source Loopback0
+ neighbor 10.128.254.24 route-reflector-client
+ neighbor 10.128.254.25 remote-as 520
+ neighbor 10.128.254.25 update-source Loopback0
+ neighbor 10.128.254.25 route-reflector-client
+ neighbor 10.128.254.26 remote-as 520
+ neighbor 10.128.254.26 update-source Loopback0
+ neighbor 10.128.254.26 route-reflector-client
+!
+~~~
+Как видно, каждому соседу добавили параметр `route-reflector-client`
+На соседних роутерах укажем R23 (Lo0:10.128.254.23) как `next-hop-self`:
+~~~
+router bgp 520
+ bgp router-id 10.128.254.26
+ bgp log-neighbor-changes
+ neighbor 10.128.254.23 remote-as 520
+ neighbor 10.128.254.23 update-source Loopback0
+ neighbor 10.128.254.23 next-hop-self
+!
+~~~
