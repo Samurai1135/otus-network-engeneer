@@ -252,3 +252,19 @@ VRF info: (vrf in name/id, vrf out name/id)
   3 10.8.0.1 1 msec 0 msec 1 msec
   4 10.9.0.2 0 msec 1 msec *
 ~~~
+Сделав обратную трассировку мы сталкиваемся с проблемой хождения трафика в обход (напрямую между 14 и 22 роутерами)
+~~~
+R22#traceroute 10.128.254.14
+Type escape sequence to abort.
+Tracing the route to 10.128.254.14
+VRF info: (vrf in name/id, vrf out name/id)
+  1 10.7.0.2 1 msec 0 msec *
+~~~
+Для перенаправления трафика через Ламас нам необходимо выставить prepend на R14 при помощи route-map:
+~~~
+route-map AS-PREP permit 10
+ set as-path prepend 1001 1001 1001 1001 1001
+~~~
+~~~
+neighbor 101.0.0.22 route-map AS-PREP out
+~~~
