@@ -17,3 +17,11 @@
 - `next-hop` и `AS_PATH` внутри iBGP не изменяется. В iBGP `next-hop` указывает адрес выхода из АС.  
 - всегда `full mesh` и маршруты, полученные от соседа, не анонсируются дальше  
 - выставлен `multihop != 1`, так как часто используются Loopback-адреса.  
+
+#### Настройка iBGP (На примере R14):
+~~~
+router bgp 1001
+ bgp router-id 10.128.254.14
+ neighbor 10.128.254.15 remote-as 1001
+ neighbor 10.128.254.15 update-source Loopback0
+~~~
