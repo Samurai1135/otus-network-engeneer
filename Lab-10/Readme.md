@@ -26,3 +26,17 @@ router bgp 1001
  neighbor 10.128.254.15 update-source Loopback0
 ~~~
 ## Настройка iBGP в офисе Москвы между маршрутизаторами R14 и R15
+Настроим Loopbak-адреса на R14 и R15
+~~~
+R14(config)#interface Loopback0
+R14(config-if)#ip address 10.128.254.14 255.255.255.255
+R14(config-if)#ip ospf 1 area 0
+R14(config-if)#end
+~~~
+~~~
+R15(config)#int loopback0
+R15(config-if)#ip address 10.128.254.15 255.255.255.255
+R15(config-if)#ip ospf 1 area 0
+R15(config-if)#exit
+~~~
+Установим BGP-соседство указав update-source Loopback0 для установки соединения через Loopbaсk'и:
