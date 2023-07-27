@@ -104,3 +104,15 @@ Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State
 10.128.254.24   4          520       0       0        1    0    0 never    Idle
 10.128.254.25   4          520       0       0        1    0    0 never    Idle
 ~~~
+Чтобы не клонировать настройки на новые пиры - можно создать peer-group с набором настроек и тиражировать ее при добавлении нового пира в AS:
+~~~
+R23(config-router)#neighbor triada peer-group
+R23(config-router)#neighbor triada remote-as 520
+R23(config-router)#neighbor triada update-source Loopback0
+~~~
+При подключении пиров:
+~~~
+R23(config-router)#neighbor 10.128.254.24 peer-group triada
+R23(config-router)#neighbor 10.128.254.25 peer-group triada
+R23(config-router)#neighbor 10.128.254.26 peer-group triada
+~~~
