@@ -33,3 +33,71 @@ R18(config)#router bgp 2042
 R18(config-router)#neighbor 10.0.4.1 prefix-list NO-TRANSIT out
 R18(config-router)#neighbor 10.0.2.1 prefix-list NO-TRANSIT out
 ~~~
+## Передадим маршрут по-умолчанию от Киторн по направлению к  Москве
+До фильтрации:
+~~~
+R14#sh ip bgp
+BGP table version is 16, local router ID is 10.128.254.14
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  10.128.254.14/32 0.0.0.0                  0         32768 i
+ r>i 10.128.254.15/32 10.128.254.15            0    200      0 i
+ *>i 10.128.254.21/32 10.128.254.15            0    200      0 301 i
+ *                    10.7.0.1                               0 101 301 i
+ *>i 10.128.254.22/32 10.128.254.15            0    200      0 301 101 i
+ *                    10.7.0.1                 0             0 101 i
+ * i 192.168.6.0/23   10.128.254.15            0    200      0 i
+ *>                   10.128.20.2              0         32768 i
+
+~~~
+
+Прокинем только дефолтный маршрут, а остальные запретим:
+~~~
+R22(config)#ip prefix-list PL-DEFAULT deny 0.0.0.0/0
+R22(config)#router bgp 101
+R22(config-router)#neighbor 10.7.0.2 default-originate
+R22(config-router)#neighbor 10.7.0.2 prefix-list PL-DEFAULT out
+R22(config-router)#neighbor 10.128.254.14 default-originate
+R22(config-router)#neighbor 10.128.254.14 prefix-list PL-DEFAULT out
+~~~
+После фильтрации и передачи дефолта видим только один маршрут 0.0.0.0. из зоны AS101
+~~~
+R14#sh ip bgp
+BGP table version is 17, local router ID is 10.128.254.14
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  0.0.0.0          10.7.0.1                               0 101 i
+ *>  10.128.254.14/32 0.0.0.0                  0         32768 i
+ r>i 10.128.254.15/32 10.128.254.15            0    200      0 i
+ *>i 10.128.254.21/32 10.128.254.15            0    200      0 301 i
+ *>i 10.128.254.22/32 10.128.254.15            0    200      0 301 101 i
+ * i 192.168.6.0/23   10.128.254.15            0    200      0 i
+ *>                   10.128.20.2              0         32768 i
+R14#sh ip route bgp
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.7.0.1 to network 0.0.0.0
+
+B*    0.0.0.0/0 [20/0] via 10.7.0.1, 00:01:34
+      10.0.0.0/8 is variably subnetted, 24 subnets, 3 masks
+B        10.128.254.21/32 [200/0] via 10.128.254.15, 00:38:03
+B        10.128.254.22/32 [200/0] via 10.128.254.15, 00:37:40
+~~~
