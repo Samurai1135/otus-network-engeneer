@@ -1,0 +1,162 @@
+       
+!
+! Last configuration change at 15:10:46 UTC Tue Aug 15 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R18
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.128.254.18 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.2.1 255.255.255.252
+ ip summary-address eigrp 2042 10.128.0.0 255.255.248.0
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.0.1 255.255.255.252
+ ip summary-address eigrp 2042 10.128.0.0 255.255.248.0
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.0.4.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 10.0.2.2 255.255.255.252
+!
+!
+router eigrp SPB
+ !
+ address-family ipv4 unicast autonomous-system 2042
+  !
+  af-interface Ethernet0/1
+   summary-address 10.128.0.0 255.255.248.0
+  exit-af-interface
+  !
+  af-interface Ethernet0/0
+   summary-address 10.128.0.0 255.255.248.0
+  exit-af-interface
+  !
+  topology base
+   redistribute static
+  exit-af-topology
+  network 10.128.0.0 0.0.0.3
+  network 10.128.2.0 0.0.0.3
+  eigrp router-id 10.128.254.18
+ exit-address-family
+!
+router bgp 2042
+ bgp router-id 10.128.254.18
+ bgp log-neighbor-changes
+ neighbor 10.0.2.1 remote-as 520
+ neighbor 10.0.4.1 remote-as 520
+ neighbor 10.128.254.24 remote-as 520
+ neighbor 10.128.254.24 update-source Loopback0
+ neighbor 10.128.254.26 remote-as 520
+ neighbor 10.128.254.26 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.128.254.18 mask 255.255.255.255
+  network 192.168.4.0 mask 255.255.254.0
+  network 192.168.4.0
+  network 192.168.5.0
+  neighbor 10.0.2.1 activate
+  neighbor 10.0.2.1 prefix-list NO-TRANSIT out
+  neighbor 10.0.4.1 activate
+  neighbor 10.0.4.1 prefix-list NO-TRANSIT out
+  neighbor 10.128.254.24 activate
+  neighbor 10.128.254.26 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.0.2.1
+ip route 0.0.0.0 0.0.0.0 10.0.4.1
+!
+!
+ip prefix-list NO-TRANSIT seq 5 permit 192.168.4.0/24
+ip prefix-list NO-TRANSIT seq 10 permit 192.168.5.0/24
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
