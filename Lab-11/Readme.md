@@ -158,18 +158,21 @@ R21(config-router)#neighbor 10.128.254.15 filter-list 1 out
 Теперь мы видим, что на R15 поступают только маршруты до пользовательских сетей:
 ~~~
 R15#sh ip route bgp
-Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2
-       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
-       ia - IS-IS inter area, * - candidate default, U - per-user static route
-       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
-       a - application route
-       + - replicated route, % - next hop override
 
 Gateway of last resort is 10.8.0.1 to network 0.0.0.0
 
 B     192.168.4.0/24 [20/0] via 10.8.0.1, 00:10:05
 B     192.168.5.0/24 [20/0] via 10.8.0.1, 00:09:34
+~~~
+~~~
+R15#sh ip bgp
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ r>  0.0.0.0          10.8.0.1                               0 301 i
+ r>i 10.128.254.14/32 10.128.254.14            0    100      0 i
+ *>  10.128.254.15/32 0.0.0.0                  0         32768 i
+ *>  192.168.4.0      10.8.0.1                               0 301 520 2042 i
+ *>  192.168.5.0      10.8.0.1                               0 301 520 2042 i
+ * i 192.168.6.0/23   10.128.254.14            0    100      0 i
+ *>                   10.128.22.2              0         32768 i
 ~~~
