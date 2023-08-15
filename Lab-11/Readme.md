@@ -101,3 +101,75 @@ B*    0.0.0.0/0 [20/0] via 10.7.0.1, 00:01:34
 B        10.128.254.21/32 [200/0] via 10.128.254.15, 00:38:03
 B        10.128.254.22/32 [200/0] via 10.128.254.15, 00:37:40
 ~~~
+## Теперь передадим дефолт от Ламас в сторону Москвы
+
+Так же передаем маршрут от R21 в сторону R15
+В маршрутах на R15 есть сети Киторн'а:
+~~~
+R15#sh ip bgp
+BGP table version is 18, local router ID is 10.128.254.15
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
+              x best-external, a additional-path, c RIB-compressed,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ r>i 0.0.0.0          10.128.254.14            0    100      0 101 i
+ r>i 10.128.254.14/32 10.128.254.14            0    100      0 i
+ *>  10.128.254.15/32 0.0.0.0                  0         32768 i
+ *>  10.128.254.21/32 10.8.0.1                 0             0 301 i
+ *>  10.128.254.22/32 10.8.0.1                               0 301 101 i
+ *>  192.168.4.0      10.8.0.1                               0 301 520 2042 i
+ *>  192.168.5.0      10.8.0.1                               0 301 520 2042 i
+ * i 192.168.6.0/23   10.128.254.14            0    100      0 i
+ *>                   10.128.22.2              0         32768 i
+~~~
+~~~
+R15#sh ip route bgp
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.8.0.1 to network 0.0.0.0
+
+      10.0.0.0/8 is variably subnetted, 23 subnets, 3 masks
+B        10.128.254.21/32 [20/0] via 10.8.0.1, 01:05:53
+B        10.128.254.22/32 [20/0] via 10.8.0.1, 01:05:29
+B     192.168.4.0/24 [20/0] via 10.8.0.1, 00:04:50
+B     192.168.5.0/24 [20/0] via 10.8.0.1, 00:04:19
+~~~
+Теперь сделаем так, чтобы R21 отдавал дефолт на R15 и фильтровал все префиксы, отличные от AS2024 (Питер)
+~~~
+R21(config)#ip as-path access-list 1 permit _2042$
+R21(config)#ip as-path access-list 1 deny .*
+R21(config)#router bgp 301
+R21(config-router)#neighbor 10.8.0.2 default-originate
+R21(config-router)#neighbor 10.8.0.2 filter-list 1 out
+R21(config-router)#neighbor 10.128.254.15 default-originate
+R21(config-router)#neighbor 10.128.254.15 filter-list 1 out
+~~~
+Теперь мы видим, что на R15 поступают только маршруты до пользовательских сетей:
+~~~
+R15#sh ip route bgp
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
+
+Gateway of last resort is 10.8.0.1 to network 0.0.0.0
+
+B     192.168.4.0/24 [20/0] via 10.8.0.1, 00:10:05
+B     192.168.5.0/24 [20/0] via 10.8.0.1, 00:09:34
+~~~
