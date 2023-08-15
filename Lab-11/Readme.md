@@ -24,3 +24,12 @@ R15(config)#ip as-path access-list 1 deny .*
 R15(config)#router bgp 1001
 R15(config-router)#neighbor 10.8.0.1 filter-list 1 out
 ~~~
+## Устраним транзитный трафик в Санкт-Петербурге
+Тут так же нет транзитного трафика. Сделаем разрешение на трансляцию только клиентских сетей:
+~~~
+R18(config)#ip prefix-list NO-TRANSIT seq 5 permit 192.168.4.0/24
+R18(config)#ip prefix-list NO-TRANSIT seq 10 permit 192.168.5.0/24
+R18(config)#router bgp 2042
+R18(config-router)#neighbor 10.0.4.1 prefix-list NO-TRANSIT out
+R18(config-router)#neighbor 10.0.2.1 prefix-list NO-TRANSIT out
+~~~
