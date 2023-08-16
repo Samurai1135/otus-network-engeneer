@@ -220,16 +220,9 @@ R15#sh ip bgp
 ~~~
 Маршрут до Киторна пропал! Проведем аналогичную настройку для R14 (будем получать только дефолт)
 ~~~
-R14(config)#ip prefix-list NO-FULL s
-R14(config)#ip prefix-list NO-FULL seq 5 p
-R14(config)#ip prefix-list NO-FULL seq 5 p
 R14(config)#ip prefix-list NO-FULL seq 5 permit 0.0.0.0/0
-R14(config)#ip prefix-list NO-FULL seq 10 de
 R14(config)#ip prefix-list NO-FULL seq 10 deny 0.0.0.0/0 ge 1
-R14(config)#router bg
 R14(config)#router bgp 1001
-R14(config-router)#nei
-R14(config-router)#neighbor 10.7.0.1 pr
 R14(config-router)#neighbor 10.7.0.1 prefix-list NO-FULL in
 ~~~
 ~~~
