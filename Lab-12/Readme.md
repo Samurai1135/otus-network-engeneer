@@ -104,7 +104,7 @@ icmp 89.20.0.5:4       10.128.31.2:4      10.128.254.21:4    10.128.254.21:4
 configure terminal
 line vty 0 4
 transport input telnet 
-password sex
+password peter
 login
 ~~~
 Защитим подключение к R19 с помощью "подмены" 23 порта на 2023:
