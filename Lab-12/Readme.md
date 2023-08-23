@@ -84,11 +84,12 @@ ip prefix-list NO-TRANSIT seq 20 permit 89.30.0.0/29
 !
 access-list 1 permit 192.168.0.0 0.0.255.255
 ~~~
-
+## Настроим статический NAT для R20
 ~~~
 
 R15(config)#ip nat inside source static 10.128.31.2 89.20.0.5
 ~~~
+Проверим результаты вывода команды show ip nat translations (показать все преобразования адресов (NAT))
 ~~~
 R15#sh ip nat translations
 Pro Inside global      Inside local       Outside local      Outside global
@@ -97,9 +98,20 @@ icmp 89.20.0.5:3       10.128.31.2:3      10.128.254.23:3    10.128.254.23:3
 icmp 89.20.0.5:4       10.128.31.2:4      10.128.254.21:4    10.128.254.21:4
 --- 89.20.0.5          10.128.31.2        ---                ---
 ~~~
+## Настроим NAT так, чтобы R19 был доступен с любого узла для удаленного управления.
+Сперва настроим на R19 telnet:
+~~~
+configure terminal
+line vty 0 4
+transport input telnet 
+password sex
+login
+~~~
+Защитим подключение к R19 с помощью "подмены" 23 порта на 2023:
 ~~~
 R15(config)#ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023 extendable
 ~~~
+extendable - переопределение
 ~~~
 VPCS> ping 89.20.0.10 -p 2023
 
@@ -112,8 +124,8 @@ VPCS> ping 89.20.0.10 -p 2023
 ~~~
 R15#sh ip nat translations
 Pro Inside global      Inside local       Outside local      Outside global
-icmp 89.20.0.5:12      10.128.31.2:12     10.8.0.1:12        10.8.0.1:12
---- 89.20.0.5          10.128.31.2        ---                ---
+icmp 89.20.0.10:12      10.128.31.2:12     10.8.0.1:12        10.8.0.1:12
+--- 89.20.0.10          10.128.31.2        ---                ---
 icmp 89.20.0.1:9753    192.168.6.1:9753   89.20.0.5:9753     89.20.0.5:9753
 icmp 89.20.0.1:10009   192.168.6.1:10009  89.20.0.5:10009    89.20.0.5:10009
 icmp 89.20.0.1:10265   192.168.6.1:10265  89.20.0.5:10265    89.20.0.5:10265
@@ -125,7 +137,9 @@ icmp 89.20.0.1:13849   192.168.6.1:13849  89.20.0.5:13849    89.20.0.5:13849
 icmp 89.20.0.1:14105   192.168.6.1:14105  89.20.0.5:14105    89.20.0.5:14105
 icmp 89.20.0.1:14361   192.168.6.1:14361  89.20.0.5:14361    89.20.0.5:14361
 ~~~
-
+Доступ работает.  
+## Настроим для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13. VPC1 и VPC7 должны получать сетевые настройки по DHCP.
+Сперва на R12 создадим исключения для уже использьзующихся сетевыми устройствами адресов и добавим два DHCP-пула для каждой из VLAN:
 ~~~
 R12(config)#ip dhcp excluded-address 192.168.6.245
 R12(config)#ip dhcp excluded-address 192.168.6.5 192.168.6.127
@@ -133,27 +147,29 @@ R12(config)#ip dhcp excluded-address 192.168.7.5 192.168.7.127
 R12(config)#ip dhcp excluded-address 192.168.7.254
 R12(config)#ip dhcp pool VLAN-6
 R12(dhcp-config)#network 192.168.6.0 255.255.255.0
-R12(dhcp-config)#default-router 10.128.25.1
+R12(dhcp-config)#default-router 192.168.6.254
 R12(dhcp-config)#domain-name moscow.net
 R12(dhcp-config)#ex
 R12(config)#ip dhcp pool VLAN-7
 R12(dhcp-config)#network 192.168.7.0 255.255.255.0
-R12(dhcp-config)#default-router 10.128.26.1
+R12(dhcp-config)#default-router 192.168.7.254
 R12(dhcp-config)#domain-name moscow.net
-
 ~~~
+Подобным образом настроим R13:
 ~~~
 R13(config)#ip dhcp excluded-address 192.168.6.128 192.168.6.254
 R13(config)#ip dhcp excluded-address 192.168.7.128 192.168.7.254
 R13(config)#ip dhcp pool VLAN-6
 R13(dhcp-config)#network 192.168.6.0 255.255.255.0
-R13(dhcp-config)#default-router 10.128.25.1
+R13(dhcp-config)#default-router 192.168.6.253
 R13(dhcp-config)#domain-name moscow.net
 R13(config)#ip dhcp pool VLAN-7
 R13(dhcp-config)#network 192.168.7.0 255.255.255.0
-R13(dhcp-config)#default-router 10.128.26.1
+R13(dhcp-config)#default-router 192.168.7.253
 R13(dhcp-config)#domain-name moscow.net
 ~~~
+Необходимо добавить, что наши свичи SW4 и SW5 - L3 коммутаторы. Для того, чтобы ответ от DHCP на широковещательный запрос доходил до адресата, необходимо на интерфейсах коммутаторов, смотрящих в локалюные сети, прописать адрес `ip helper-address` (адрес смотрящего на локальные сети интерфейса DHCP-сервера).
+Выполнив требуемые настройки запросим IP-адрес для VPC от DHCP-сервер(а/ов):
 ~~~
 VPCS> ip dhcp -r
 DDORA IP 192.168.7.2/24 GW 192.168.7.254
@@ -162,6 +178,27 @@ DDORA IP 192.168.7.2/24 GW 192.168.7.254
 VPCS> ip dhcp
 DORA IP 192.168.6.2/24 GW 192.168.6.253
 ~~~
+## Настроим NTP сервера на R12 и R13
+Поскольку доступа к Интернет нет и не с чем синхронизироваться, сделаем R12 и R13 NTP-мастерами. Другие сетевые устройства будут синхронизировать свои часы ориентируясь на эти серверы.
+На R12 и R13 сделаем настройку:
+~~~
+conf t
+!
+ntp master 2
+exit
+!
+~~~
+А на сетевых устройствах нашей АС:
+~~~
+conf t
+!
+ntp server 192.168.25.1
+ntp server 192.168.26.1
+!
+ntp update-calendar
+!
+~~~
+Проверим синхронизацию времени на R15:
 ~~~
 R15#sh ntp associations
 
@@ -170,6 +207,7 @@ R15#sh ntp associations
 +~10.128.26.1     127.127.1.1      2     26    128     7  0.000   0.000  2.325
  * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured
 ~~~
+... и на SW4
 ~~~
 SW4#sh ntp associations
 
