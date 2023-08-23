@@ -49,3 +49,8 @@ interface Ethernet0/3
  ip ospf 1 area 102
 !
 ~~~
+~~~
+address-family ipv4
+  network 10.128.254.15 mask 255.255.255.255
+  network 89.20.0.0 mask 255.255.255.0
+~~~
