@@ -80,3 +80,14 @@ ip prefix-list NO-TRANSIT seq 20 permit 89.30.0.0/29
 !
 access-list 1 permit 192.168.0.0 0.0.255.255
 ~~~
+~~~
+R15(config)#ip nat inside source static 10.128.31.2 89.20.0.5
+~~~
+~~~
+R15#sh ip nat translations
+Pro Inside global      Inside local       Outside local      Outside global
+icmp 89.20.0.5:1       10.128.31.2:1      89.30.0.1:1        89.30.0.1:1
+icmp 89.20.0.5:3       10.128.31.2:3      10.128.254.23:3    10.128.254.23:3
+icmp 89.20.0.5:4       10.128.31.2:4      10.128.254.21:4    10.128.254.21:4
+--- 89.20.0.5          10.128.31.2        ---                ---
+~~~
