@@ -1,6 +1,6 @@
-        
+
 !
-! Last configuration change at 14:46:57 UTC Tue Aug 15 2023
+! Last configuration change at 07:37:31 UTC Wed Aug 23 2023
 !
 version 15.4
 service timestamps debug datetime msec
@@ -106,29 +106,17 @@ interface Ethernet1/3
 router bgp 101
  bgp router-id 10.7.0.1
  bgp log-neighbor-changes
+ neighbor 10.5.0.1 remote-as 520
  neighbor 10.7.0.2 remote-as 1001
  neighbor 10.9.0.1 remote-as 301
- neighbor 10.128.254.14 remote-as 1001
- neighbor 10.128.254.14 update-source Loopback0
- neighbor 10.128.254.15 remote-as 1001
- neighbor 10.128.254.15 update-source Loopback0
- neighbor 10.128.254.21 remote-as 301
- neighbor 10.128.254.21 update-source Loopback0
- neighbor 10.128.254.23 remote-as 520
- neighbor 10.128.254.23 update-source Loopback0
  !
  address-family ipv4
   network 10.128.254.22 mask 255.255.255.255
+  neighbor 10.5.0.1 activate
   neighbor 10.7.0.2 activate
   neighbor 10.7.0.2 default-originate
   neighbor 10.7.0.2 prefix-list PL-DEFAULT out
   neighbor 10.9.0.1 activate
-  neighbor 10.128.254.14 activate
-  neighbor 10.128.254.14 default-originate
-  neighbor 10.128.254.14 prefix-list PL-DEFAULT out
-  neighbor 10.128.254.15 activate
-  neighbor 10.128.254.21 activate
-  neighbor 10.128.254.23 activate
  exit-address-family
 !
 ip forward-protocol nd
@@ -138,7 +126,7 @@ no ip http server
 no ip http secure-server
 !
 !
-ip prefix-list PL-DEFAULT seq 5 deny 0.0.0.0/0
+ip prefix-list PL-DEFAULT seq 10 deny 0.0.0.0/0 le 32
 !
 !
 !

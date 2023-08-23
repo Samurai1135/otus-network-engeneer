@@ -1,6 +1,4 @@
-        
-!
-! Last configuration change at 15:56:48 UTC Tue Aug 15 2023
+
 !
 version 15.4
 service timestamps debug datetime msec
@@ -125,6 +123,7 @@ router bgp 1001
   neighbor 10.7.0.1 activate
   neighbor 10.7.0.1 prefix-list NO-FULL in
   neighbor 10.7.0.1 route-map PREP out
+  neighbor 10.7.0.1 filter-list 1 out
   neighbor 10.128.254.15 activate
   neighbor 10.128.254.15 next-hop-self
   neighbor 10.128.254.22 activate
@@ -133,6 +132,8 @@ router bgp 1001
 !
 ip forward-protocol nd
 !
+ip as-path access-list 1 permit ^$
+ip as-path access-list 1 deny .*
 !
 no ip http server
 no ip http secure-server
@@ -167,5 +168,3 @@ line vty 0 4
 !
 !
 end
-
-    

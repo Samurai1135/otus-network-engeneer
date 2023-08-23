@@ -1,6 +1,6 @@
-       
+
 !
-! Last configuration change at 15:27:18 UTC Tue Aug 15 2023
+! Last configuration change at 07:21:16 UTC Wed Aug 23 2023
 !
 version 15.4
 service timestamps debug datetime msec
@@ -109,12 +109,6 @@ router bgp 301
  neighbor 10.6.0.1 remote-as 520
  neighbor 10.8.0.2 remote-as 1001
  neighbor 10.9.0.2 remote-as 101
- neighbor 10.128.254.15 remote-as 1001
- neighbor 10.128.254.15 update-source Loopback0
- neighbor 10.128.254.22 remote-as 520
- neighbor 10.128.254.22 update-source Loopback0
- neighbor 10.128.254.24 remote-as 520
- neighbor 10.128.254.24 update-source Loopback0
  !
  address-family ipv4
   network 10.128.254.21 mask 255.255.255.255
@@ -122,10 +116,6 @@ router bgp 301
   neighbor 10.8.0.2 activate
   neighbor 10.8.0.2 default-originate
   neighbor 10.9.0.2 activate
-  neighbor 10.128.254.15 activate
-  neighbor 10.128.254.15 default-originate
-  neighbor 10.128.254.22 activate
-  neighbor 10.128.254.24 activate
  exit-address-family
 !
 ip forward-protocol nd
@@ -157,5 +147,3 @@ line vty 0 4
 !
 !
 end
-
-    
