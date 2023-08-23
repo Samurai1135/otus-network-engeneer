@@ -119,3 +119,40 @@ icmp 89.20.0.1:13849   192.168.6.1:13849  89.20.0.5:13849    89.20.0.5:13849
 icmp 89.20.0.1:14105   192.168.6.1:14105  89.20.0.5:14105    89.20.0.5:14105
 icmp 89.20.0.1:14361   192.168.6.1:14361  89.20.0.5:14361    89.20.0.5:14361
 ~~~
+
+~~~
+R12(config)#ip dhcp excluded-address 192.168.6.245
+R12(config)#ip dhcp excluded-address 192.168.6.5 192.168.6.127
+R12(config)#ip dhcp excluded-address 192.168.7.5 192.168.7.127
+R12(config)#ip dhcp excluded-address 192.168.7.254
+R12(config)#ip dhcp pool VLAN-6
+R12(dhcp-config)#network 192.168.6.0 255.255.255.0
+R12(dhcp-config)#default-router 10.128.25.1
+R12(dhcp-config)#domain-name moscow.net
+R12(dhcp-config)#ex
+R12(config)#ip dhcp pool VLAN-7
+R12(dhcp-config)#network 192.168.7.0 255.255.255.0
+R12(dhcp-config)#default-router 10.128.26.1
+R12(dhcp-config)#domain-name moscow.net
+
+~~~
+~~~
+R13(config)#ip dhcp excluded-address 192.168.6.128 192.168.6.254
+R13(config)#ip dhcp excluded-address 192.168.7.128 192.168.7.254
+R13(config)#ip dhcp pool VLAN-6
+R13(dhcp-config)#network 192.168.6.0 255.255.255.0
+R13(dhcp-config)#default-router 10.128.25.1
+R13(dhcp-config)#domain-name moscow.net
+R13(config)#ip dhcp pool VLAN-7
+R13(dhcp-config)#network 192.168.7.0 255.255.255.0
+R13(dhcp-config)#default-router 10.128.26.1
+R13(dhcp-config)#domain-name moscow.net
+~~~
+~~~
+VPCS> ip dhcp -r
+DDORA IP 192.168.7.2/24 GW 192.168.7.254
+~~~
+~~~
+VPCS> ip dhcp
+DORA IP 192.168.6.2/24 GW 192.168.6.253
+~~~
