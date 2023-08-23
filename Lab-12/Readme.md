@@ -54,3 +54,14 @@ address-family ipv4
   network 10.128.254.15 mask 255.255.255.255
   network 89.20.0.0 mask 255.255.255.0
 ~~~
+
+Пинг VPC7->VPC
+~~~
+VPCS> ping 192.168.5.1
+
+84 bytes from 192.168.5.1 icmp_seq=1 ttl=55 time=2.610 ms
+84 bytes from 192.168.5.1 icmp_seq=2 ttl=55 time=1.587 ms
+84 bytes from 192.168.5.1 icmp_seq=3 ttl=55 time=1.624 ms
+84 bytes from 192.168.5.1 icmp_seq=4 ttl=55 time=1.594 ms
+84 bytes from 192.168.5.1 icmp_seq=5 ttl=55 time=1.533 ms
+~~~
