@@ -156,3 +156,19 @@ DDORA IP 192.168.7.2/24 GW 192.168.7.254
 VPCS> ip dhcp
 DORA IP 192.168.6.2/24 GW 192.168.6.253
 ~~~
+~~~
+R15#sh ntp associations
+
+  address         ref clock       st   when   poll reach  delay  offset   disp
+*~10.128.25.1     .LOCL.           1     35    128     7  0.000   0.000  2.657
++~10.128.26.1     127.127.1.1      2     26    128     7  0.000   0.000  2.325
+ * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured
+~~~
+~~~
+SW4#sh ntp associations
+
+  address         ref clock       st   when   poll reach  delay  offset   disp
+*~10.128.25.1     .LOCL.           1     15    128    17  0.000   0.000  2.812
++~10.128.26.1     127.127.1.1      2     12    128    17  0.000   0.000  2.555
+ * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured
+~~~
