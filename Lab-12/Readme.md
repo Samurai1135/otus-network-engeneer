@@ -15,14 +15,17 @@
 - `Часть8.`Все офисы в лабораторной работе должны иметь IP связность.
 
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/e740525ec174aa37cd294218ebd497b0dc22b089/Lab-12/Pics/Scheem.png)  
-
+## Настройка NAT в офисе Москва на R14 и R15.
+Внутренние сети будем скрывать под адресом 89.20.0.1 . Условно, адрес, выданный нам провайдером.  
 ~~~
 ip nat pool NAT-MOSCOW1 89.20.0.1 89.20.0.1 netmask 255.255.255.252
 ip nat inside source list 1 pool NAT-MOSCOW1 overload
 ~~~
+В данном случае `overload` говорит об использовании PAT
 ~~~
 access-list 1 permit 192.168.0.0 0.0.255.255
 ~~~
+
 ~~~
 interface Ethernet0/0
  ip address 10.128.23.1 255.255.255.252
@@ -49,12 +52,13 @@ interface Ethernet0/3
  ip ospf 1 area 102
 !
 ~~~
+Необходимо анонсировать "новую" сеть в BGP удалив при этом старые network (локальные сети 192.168.6.0 и 192.168.7.0 ) - они будут попросту не нужны
 ~~~
 address-family ipv4
-  network 10.128.254.15 mask 255.255.255.255
   network 89.20.0.0 mask 255.255.255.0
 ~~~
-
+Анатогичную настройку делаем и на R14
+## Проверка связи Москвы с Петербургом
 Пинг VPC7->VPC
 ~~~
 VPCS> ping 192.168.5.1
@@ -65,11 +69,11 @@ VPCS> ping 192.168.5.1
 84 bytes from 192.168.5.1 icmp_seq=4 ttl=55 time=1.594 ms
 84 bytes from 192.168.5.1 icmp_seq=5 ttl=55 time=1.533 ms
 ~~~
+## Настроим PAT на R18, используя для трансяции пул из 5 адресов
+Поскольку мы ранее создавали правило трансляции только внутренних подсетей - необходимо добавить правило для трансляции в BGP выбранного пула адресов
 ~~~
 ip nat pool NAT-SPB 89.30.0.1 89.30.0.5 netmask 255.255.255.248
 ip nat inside source list 1 pool NAT-SPB overload
-ip route 0.0.0.0 0.0.0.0 10.0.2.1
-ip route 0.0.0.0 0.0.0.0 10.0.4.1
 ip route 89.30.0.0 255.255.255.248 Null0
 !
 !
@@ -80,7 +84,9 @@ ip prefix-list NO-TRANSIT seq 20 permit 89.30.0.0/29
 !
 access-list 1 permit 192.168.0.0 0.0.255.255
 ~~~
+
 ~~~
+
 R15(config)#ip nat inside source static 10.128.31.2 89.20.0.5
 ~~~
 ~~~
