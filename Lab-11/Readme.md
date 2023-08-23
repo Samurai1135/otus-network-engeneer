@@ -293,3 +293,18 @@ VPCS> ping 192.168.5.1
 84 bytes from 192.168.5.1 icmp_seq=4 ttl=55 time=1.594 ms
 84 bytes from 192.168.5.1 icmp_seq=5 ttl=55 time=1.533 ms
 ~~~
+~~~
+ip nat pool NAT-SPB 89.30.0.1 89.30.0.5 netmask 255.255.255.248
+ip nat inside source list 1 pool NAT-SPB overload
+ip route 0.0.0.0 0.0.0.0 10.0.2.1
+ip route 0.0.0.0 0.0.0.0 10.0.4.1
+ip route 89.30.0.0 255.255.255.248 Null0
+!
+!
+ip prefix-list NO-TRANSIT seq 5 permit 192.168.4.0/24
+ip prefix-list NO-TRANSIT seq 10 permit 192.168.5.0/24
+ip prefix-list NO-TRANSIT seq 20 permit 89.30.0.0/29
+!
+!
+access-list 1 permit 192.168.0.0 0.0.255.255
+~~~
