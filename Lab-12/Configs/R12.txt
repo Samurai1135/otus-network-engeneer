@@ -1,0 +1,171 @@
+       
+!
+! Last configuration change at 15:46:47 UTC Wed Aug 23 2023
+! NVRAM config last updated at 15:56:39 UTC Wed Aug 23 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R12
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.6.245
+ip dhcp excluded-address 192.168.6.254
+ip dhcp excluded-address 192.168.7.254
+ip dhcp excluded-address 192.168.6.5 192.168.6.127
+ip dhcp excluded-address 192.168.7.5 192.168.7.127
+!
+ip dhcp pool VLAN-6
+ network 192.168.6.0 255.255.255.0
+ domain-name moscow.net
+ default-router 192.168.6.254 
+!
+ip dhcp pool VLAN-7
+ network 192.168.7.0 255.255.255.0
+ domain-name moscow.net
+ default-router 192.168.7.254 
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.128.254.12 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.25.1 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet0/0.6
+ no shutdown
+ encapsulation dot1Q 6
+ ip helper-address 10.128.22.1
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.25.10 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet0/1.7
+ no shutdown
+ encapsulation dot1Q 7
+ ip helper-address 10.128.22.1
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.128.20.2 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 10.128.22.2 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet1/0
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 10.128.254.12
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 192.168.6.0 255.255.255.0 10.128.25.2
+ip route 192.168.6.0 255.255.255.0 10.128.25.9
+ip route 192.168.7.0 255.255.255.0 10.128.25.9
+ip route 192.168.7.0 255.255.255.0 10.128.25.2
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+ntp master 1
+!
+end
+
+    
