@@ -26,4 +26,6 @@
 > [Lab-08](https://github.com/Samurai1135/otus-network-engeneer/tree/78f4ed463bd7154c9da02a603e3581e036891005/Lab-08)  - EIGRP  
 > [Lab-09](https://github.com/Samurai1135/otus-network-engeneer/tree/27691fb556876464d8c2e23c04ef0adfb2e8117c/Lab-09) - BGP. Основы  
 > [Lab-10](https://github.com/Samurai1135/otus-network-engeneer/tree/8cc3d508abd7b323d364e4eeb2d5662830135ef7/Lab-10) - iBGP  
-> [Lab-11](https://github.com/Samurai1135/otus-network-engeneer/tree/32c81244e068990e499dffea703ce7d502d64a03/Lab-11) - BGP.Фильтрация  
+> [Lab-11](https://github.com/Samurai1135/otus-network-engeneer/tree/32c81244e068990e499dffea703ce7d502d64a03/Lab-11) - BGP.Фильтрация
+> [Lab-12](https://github.com/Samurai1135/otus-network-engeneer/tree/f8cb593ffc70c9c4f9d34b4e2d52819d975ea7cb/Lab-12) - NAT. DHCP. NTP  
+ 
