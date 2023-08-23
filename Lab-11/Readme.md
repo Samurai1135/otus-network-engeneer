@@ -12,8 +12,8 @@
 ![](https://github.com/Samurai1135/otus-network-engeneer/blob/95263ab0946111740c927f2bc6a498d6676490a6/Lab-11/Pics/Map.png)
 ## Устранение транзитного трафика
 Существует два  способа фильтрации транзитного трафика:
-  * когда мы не являемся транзитной зоной АС (фильтрация по as-path)
-  * когда мы являемся транзитной зоной АС (фильтрация по набору префиксов)
+  * когда мы не являемся транзитной АС (фильтрация по as-path)
+  * когда мы являемся транзитной  АС (фильтрация по набору префиксов)
 
 ## Устраняем транзитный трафик в Москве
 
@@ -60,7 +60,7 @@ RPKI validation codes: V valid, I invalid, N Not found
 
 Прокинем только дефолтный маршрут, а остальные запретим:
 ~~~
-R22(config)#ip prefix-list PL-DEFAULT deny 0.0.0.0/0
+R22(config)#ip prefix-list PL-DEFAULT deny 0.0.0.0/0 le 32
 R22(config)#router bgp 101
 R22(config-router)#neighbor 10.7.0.2 default-originate
 R22(config-router)#neighbor 10.7.0.2 prefix-list PL-DEFAULT out
@@ -223,7 +223,7 @@ R15#sh ip bgp
 Маршрут до Киторна пропал! Проведем аналогичную настройку для R14 (будем получать только дефолт)
 ~~~
 R14(config)#ip prefix-list NO-FULL seq 5 permit 0.0.0.0/0
-R14(config)#ip prefix-list NO-FULL seq 10 deny 0.0.0.0/0 ge 1
+R14(config)#ip prefix-list NO-FULL seq 10 deny 0.0.0.0/0 le 32
 R14(config)#router bgp 1001
 R14(config-router)#neighbor 10.7.0.1 prefix-list NO-FULL in
 ~~~
