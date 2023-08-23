@@ -91,3 +91,15 @@ icmp 89.20.0.5:3       10.128.31.2:3      10.128.254.23:3    10.128.254.23:3
 icmp 89.20.0.5:4       10.128.31.2:4      10.128.254.21:4    10.128.254.21:4
 --- 89.20.0.5          10.128.31.2        ---                ---
 ~~~
+~~~
+R15(config)#ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023 extendable
+~~~
+~~~
+VPCS> ping 89.20.0.10 -p 2023
+
+84 bytes from 89.20.0.10 icmp_seq=1 ttl=253 time=1.002 ms
+84 bytes from 89.20.0.10 icmp_seq=2 ttl=253 time=0.952 ms
+84 bytes from 89.20.0.10 icmp_seq=3 ttl=253 time=0.947 ms
+84 bytes from 89.20.0.10 icmp_seq=4 ttl=253 time=0.921 ms
+84 bytes from 89.20.0.10 icmp_seq=5 ttl=253 time=0.923 ms
+~~~
