@@ -70,7 +70,7 @@ R22(config-router)#neighbor 10.128.254.14 prefix-list PL-DEFAULT out
 После фильтрации и передачи дефолта видим только один маршрут 0.0.0.0. из зоны AS101
 ~~~
 R14#sh ip bgp
-BGP table version is 17, local router ID is 10.128.254.14
+BGP table version is 7, local router ID is 10.128.254.14
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
               r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter,
               x best-external, a additional-path, c RIB-compressed,
@@ -81,10 +81,9 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>  0.0.0.0          10.7.0.1                               0 101 i
  *>  10.128.254.14/32 0.0.0.0                  0         32768 i
  r>i 10.128.254.15/32 10.128.254.15            0    200      0 i
- *>i 10.128.254.21/32 10.128.254.15            0    200      0 301 i
- *>i 10.128.254.22/32 10.128.254.15            0    200      0 301 101 i
- * i 192.168.6.0/23   10.128.254.15            0    200      0 i
- *>                   10.128.20.2              0         32768 i
+ *>i 192.168.4.0      10.128.254.15            0    200      0 301 520 2042 i
+ *>i 192.168.5.0      10.128.254.15            0    200      0 301 520 2042 i
+ *>  192.168.6.0/23   10.128.20.2              0         32768 i
 R14#sh ip route bgp
 Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
        D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
@@ -244,7 +243,24 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>i 192.168.5.0      10.128.254.15            0    200      0 301 520 2042 i
  *>  192.168.6.0/23   10.128.20.2              0         32768 i
 ~~~
+~~~
+R14#sh ip route bgp
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override
 
+Gateway of last resort is 10.7.0.1 to network 0.0.0.0
+
+B*    0.0.0.0/0 [20/0] via 10.7.0.1, 00:01:34
+B     192.168.4.0/24 [200/0] via 10.128.254.15, 00:00:48
+B     192.168.5.0/24 [200/0] via 10.128.254.15, 00:00:48
+~~~
 ## Проверим работу наших сетей
 Пинг VPC8->VPC1
 ~~~
