@@ -115,6 +115,7 @@ router bgp 301
   neighbor 10.6.0.1 activate
   neighbor 10.8.0.2 activate
   neighbor 10.8.0.2 default-originate
+  neighbor 10.8.0.2 filter-list 1 out
   neighbor 10.9.0.2 activate
  exit-address-family
 !
