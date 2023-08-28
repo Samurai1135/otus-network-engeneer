@@ -112,7 +112,7 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
 Дописываем недостающие маршруты на R28:
 ~~~
-ip route 89.20.0.14 255.255.255.255 10.0.1.1
+ip route 89.20.0.14 255.255.255.255 10.0.0.2
 ip route 89.20.0.15 255.255.255.255 10.0.0.1
 ~~~
 ~~~
@@ -160,8 +160,8 @@ interface Tunnel10
 
 R14 настраиваем аналогично.
 ~~~
-interface Tunnel11
- ip address 10.11.0.1 255.255.255.0
+interface Tunnel10
+ ip address 10.10.0.2 255.255.255.0
  no ip redirects
  ip mtu 1400
  ip nhrp map multicast dynamic
@@ -170,38 +170,26 @@ interface Tunnel11
  tunnel source 89.20.0.14
  tunnel mode gre multipoint
  tunnel key 200
-!
 ~~~
 Настроим R27 с ролью SPOKE:
 ~~~
 interface Tunnel10
+ no shutdown
  ip address 10.10.0.5 255.255.255.0
  no ip redirects
  ip mtu 1400
  ip nhrp map multicast 89.20.0.15
  ip nhrp map 10.10.0.1 89.20.0.15
- ip nhrp network-id 10
- ip nhrp nhs 10.10.0.1
- ip tcp adjust-mss 1360
- tunnel source Ethernet0/0
- tunnel mode gre multipoint
- tunnel key 200
-!
-interface Tunnel11
- ip address 10.11.0.5 255.255.255.0
- no ip redirects
- ip mtu 1400
  ip nhrp map multicast 89.20.0.14
- ip nhrp map 10.11.0.1 89.20.0.14
+ ip nhrp map 10.10.0.2 89.20.0.14
  ip nhrp network-id 10
- ip nhrp nhs 10.11.0.1
+ ip nhrp nhs 10.10.0.1 priority 1
+ ip nhrp nhs 10.10.0.2 priority 2
  ip tcp adjust-mss 1360
  tunnel source Ethernet0/0
  tunnel mode gre multipoint
  tunnel key 200
-!
 ~~~
-На обоих интерфейсах указывается один и тот же адрес источника.
 
 Проверяем:
 ~~~
@@ -214,45 +202,30 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 Настраиваем R28:
 ~~~
 interface Tunnel10
+ no shutdown
  ip address 10.10.0.3 255.255.255.0
  no ip redirects
  ip mtu 1400
  ip nhrp map multicast 89.20.0.15
  ip nhrp map 10.10.0.1 89.20.0.15
- ip nhrp network-id 200
- ip nhrp holdtime 600
- ip nhrp nhs 10.10.0.1
- ip nhrp shortcut
+ ip nhrp map multicast 89.20.0.14
+ ip nhrp map 10.10.0.2 89.20.0.14
+ ip nhrp network-id 10
+ ip nhrp nhs 10.10.0.1 priority 1
+ ip nhrp nhs 10.10.0.2 priority 2
  ip tcp adjust-mss 1360
  tunnel source Ethernet0/0
  tunnel mode gre multipoint
  tunnel key 200
-!
-interface Tunnel11
- ip address 10.11.0.3 255.255.255.0
- no ip redirects
- ip mtu 1400
- ip nhrp map multicast 89.20.0.14
- ip nhrp map 10.11.0.1 89.20.0.14
- ip nhrp network-id 10
- ip nhrp holdtime 600
- ip nhrp nhs 10.11.0.1
- ip nhrp shortcut
- ip tcp adjust-mss 1360
- tunnel source Ethernet0/1
- tunnel mode gre multipoint
- tunnel key 200
-!
 ~~~
 И проверяем созданные тоннели:
 ~~~
-R15#sh ip nhrp
 10.10.0.3/32 via 10.10.0.3
-   Tunnel10 created 04:41:23, expire 00:08:58
+   Tunnel10 created 00:26:02, expire 00:09:42
    Type: dynamic, Flags: unique registered used nhop
    NBMA address: 10.0.0.2
 10.10.0.5/32 via 10.10.0.5
-   Tunnel10 created 04:41:37, expire 01:59:38
+   Tunnel10 created 00:25:52, expire 01:47:04
    Type: dynamic, Flags: unique registered used nhop
    NBMA address: 10.0.3.2
 ~~~
@@ -269,9 +242,9 @@ Sending 5, 100-byte ICMP Echos to 10.10.0.3, timeout is 2 seconds:
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
 ~~~
-R28#ping 10.11.0.1
+R28#ping 10.10.0.2
 Type escape sequence to abort.
-Sending 5, 100-byte ICMP Echos to 10.11.0.1, timeout is 2 seconds:
+Sending 5, 100-byte ICMP Echos to 10.10.0.2, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
 R28#ping 10.10.0.1
