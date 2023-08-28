@@ -11,7 +11,8 @@
 - `Часть2.`Настроить DMVMN между Москва и Чокурдах, Лабытнанги.
 - `Часть3.`Все узлы в офисах в лабораторной работе должны иметь IP связность.
 
-
+## Настроим GRE-тоннель между Москвой и Питером:
+Проверяем IP-связность
 ~~~
 R18#ping 89.20.0.15 source 89.30.0.18
 Type escape sequence to abort.
@@ -27,6 +28,8 @@ Packet sent with a source address of 89.30.0.18
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
+Строим GRE-тоннель на бордерах Москвы
+R14:
 ~~~
 interface Tunnel2
  ip address 10.100.1.1 255.255.255.252
@@ -36,6 +39,7 @@ interface Tunnel2
  tunnel destination 89.30.0.18
 !
 ~~~
+R15:
 ~~~
 interface Tunnel1
  ip address 10.100.0.1 255.255.255.252
@@ -44,6 +48,7 @@ interface Tunnel1
  tunnel source 89.20.0.15
  tunnel destination 89.30.0.18
 ~~~
+Далее настраиваем бордер Питера аналогичным образом:
  ~~~
 interface Tunnel1
  ip address 10.100.0.2 255.255.255.252
@@ -61,6 +66,7 @@ interface Tunnel2
 !
 
 ~~~
+Проверяем, поднялись ли тоннели:
 ~~~
 R18#sh ip int brief
 Interface                  IP-Address      OK? Method Status                Protocol
@@ -73,6 +79,7 @@ NVI0                       10.128.2.1      YES unset  up                    up
 Tunnel1                    10.100.0.2      YES NVRAM  up                    up
 Tunnel2                    10.100.1.2      YES NVRAM  up                    up
 ~~~
+Проверим сетевую связность бордеров через тоннели:
 ~~~
 R18#ping 10.100.0.1
 Type escape sequence to abort.
@@ -85,9 +92,10 @@ Sending 5, 100-byte ICMP Echos to 10.100.1.1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
-~~~
-Настроить DMVPN между офисами Москва и Чокурдах, Лабытнанги
 
+## Настроим DMVPN между офисами Москва и Чокурдах, Лабытнанги
+Проверяем связность:
+~~~
 R15#ping 10.0.3.2 source 89.20.0.15
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.0.3.2, timeout is 2 seconds:
@@ -102,6 +110,7 @@ Packet sent with a source address of 89.20.0.14
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
+Дописываем недостающие маршруты на R28:
 ~~~
 ip route 89.20.0.14 255.255.255.255 10.0.1.1
 ip route 89.20.0.15 255.255.255.255 10.0.0.1
@@ -120,20 +129,22 @@ Packet sent with a source address of 89.20.0.15
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
-~~~
+
 Объединять в виртуальную сеть будем следующим образом (для роутеров указаны connected-интерфейсы и роли):
 
 Офис в Москве - HUB:
-
+~~~
 R14: 89.20.0.14
 R15: 89.20.0.15
-
+~~~
 Лабынтаги и Чокурдах - SPOKE:
+~~~
 R27: 10.0.3.2
 R28: 10.0.0.1, 10.0.1.1
 ~~~
-~~~
+
 Настроим R15 с ролью HUB:
+~~~
 interface Tunnel10
  ip address 10.10.0.1 255.255.255.0
  no ip redirects
@@ -190,7 +201,7 @@ interface Tunnel11
  tunnel key 200
 !
 ~~~
-/// На обоих интерфейсах указывается один и тот же адрес источника.
+На обоих интерфейсах указывается один и тот же адрес источника.
 
 Проверяем:
 ~~~
