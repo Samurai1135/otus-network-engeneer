@@ -104,22 +104,21 @@ icmp 89.20.0.5:4       10.128.31.2:4      10.128.254.21:4    10.128.254.21:4
 configure terminal
 line vty 0 4
 transport input telnet 
-password peter
+password otus
 login
 ~~~
 Защитим подключение к R19 с помощью "подмены" 23 порта на 2023:
 ~~~
-R15(config)#ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023 extendable
+R15(config)#ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023
 ~~~
-extendable - переопределение
 ~~~
-VPCS> ping 89.20.0.10 -p 2023
+VPCS> ping 89.20.0.10 -p 2023 -P 6
 
-84 bytes from 89.20.0.10 icmp_seq=1 ttl=253 time=1.002 ms
-84 bytes from 89.20.0.10 icmp_seq=2 ttl=253 time=0.952 ms
-84 bytes from 89.20.0.10 icmp_seq=3 ttl=253 time=0.947 ms
-84 bytes from 89.20.0.10 icmp_seq=4 ttl=253 time=0.921 ms
-84 bytes from 89.20.0.10 icmp_seq=5 ttl=253 time=0.923 ms
+Connect   2023@89.20.0.10 RST returned
+Connect   2023@89.20.0.10 RST returned
+Connect   2023@89.20.0.10 RST returned
+Connect   2023@89.20.0.10 RST returned
+Connect   2023@89.20.0.10 RST returned
 ~~~
 ~~~
 R15#sh ip nat translations
@@ -139,12 +138,15 @@ icmp 89.20.0.1:14361   192.168.6.1:14361  89.20.0.5:14361    89.20.0.5:14361
 ~~~
 Доступ работает.  
 ## Настроим для IPv4 DHCP сервер в офисе Москва на маршрутизаторах R12 и R13. VPC1 и VPC7 должны получать сетевые настройки по DHCP.
-Сперва на R12 создадим исключения для уже использующихся сетевыми устройствами адресов и добавим два DHCP-пула для каждой из VLAN:
+Сперва на R12 создадим исключения для уже использующихся сетевыми устройствами адресов и добавим два DHCP-пула для каждой из VLAN,  
+Ограничим пулы для R12 маршрутизатора с 128 по 254 адрес, исключив адреса 192.168.6(7).1-192.168.6(7).127 для избежания конфликта адресов с базой DHCP-сервера на R13:
 ~~~
-R12(config)#ip dhcp excluded-address 192.168.6.245
-R12(config)#ip dhcp excluded-address 192.168.6.5 192.168.6.127
-R12(config)#ip dhcp excluded-address 192.168.7.5 192.168.7.127
+R12(config)#ip dhcp excluded-address 192.168.6.254
+R12(config)#ip dhcp excluded-address 192.168.6.253
+R12(config)#ip dhcp excluded-address 192.168.6.1 192.168.6.127
+R12(config)#ip dhcp excluded-address 192.168.7.1 192.168.7.127
 R12(config)#ip dhcp excluded-address 192.168.7.254
+R12(config)#ip dhcp excluded-address 192.168.7.253
 R12(config)#ip dhcp pool VLAN-6
 R12(dhcp-config)#network 192.168.6.0 255.255.255.0
 R12(dhcp-config)#default-router 192.168.6.254
@@ -155,7 +157,7 @@ R12(dhcp-config)#network 192.168.7.0 255.255.255.0
 R12(dhcp-config)#default-router 192.168.7.254
 R12(dhcp-config)#domain-name moscow.net
 ~~~
-Подобным образом настроим R13:
+Подобным образом настроим R13, исключив адреса с 128 по 254 (используются на R12):
 ~~~
 R13(config)#ip dhcp excluded-address 192.168.6.128 192.168.6.254
 R13(config)#ip dhcp excluded-address 192.168.7.128 192.168.7.254
