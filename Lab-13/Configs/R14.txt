@@ -1,7 +1,7 @@
 
 !
-! No configuration change since last restart
-! NVRAM config last updated at 11:57:43 UTC Mon Aug 28 2023
+! Last configuration change at 14:49:03 UTC Mon Aug 28 2023
+! NVRAM config last updated at 15:06:25 UTC Mon Aug 28 2023
 !
 version 15.4
 service timestamps debug datetime msec
@@ -78,7 +78,7 @@ interface Tunnel2
 !
 interface Tunnel11
  no shutdown
- ip address 10.11.0.1 255.255.255.0
+ ip address 10.10.0.2 255.255.255.0
  no ip redirects
  ip mtu 1400
  ip nhrp map multicast dynamic
@@ -120,6 +120,8 @@ interface Ethernet0/3
 interface Ethernet1/0
  no shutdown
  ip address 10.128.150.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
  ip ospf 1 area 0
 !
 interface Ethernet1/1
@@ -169,6 +171,7 @@ no ip http server
 no ip http secure-server
 ip nat pool NAT-MOSCOW 89.20.0.1 89.20.0.1 netmask 255.255.255.252
 ip nat inside source list 1 pool NAT-MOSCOW overload
+ip nat inside source static tcp 10.128.30.2 23 89.20.0.11 2023 extendable
 ip route 89.20.0.15 255.255.255.255 10.128.150.2
 ip route 192.168.6.0 255.255.254.0 10.128.20.2
 ip route 192.168.6.0 255.255.254.0 10.128.21.2
