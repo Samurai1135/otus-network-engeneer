@@ -37,12 +37,12 @@ ip dhcp excluded-address 192.168.7.128 192.168.7.254
 ip dhcp pool VLAN-6
  network 192.168.6.0 255.255.255.0
  domain-name moscow.net
- default-router 192.168.6.253 
+ default-router 192.168.6.254 
 !
 ip dhcp pool VLAN-7
  network 192.168.7.0 255.255.255.0
  domain-name moscow.net
- default-router 192.168.7.253 
+ default-router 192.168.7.254 
 !
 !
 !
