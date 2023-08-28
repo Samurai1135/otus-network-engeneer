@@ -142,11 +142,9 @@ icmp 89.20.0.1:14361   192.168.6.1:14361  89.20.0.5:14361    89.20.0.5:14361
 Ограничим пулы для R12 маршрутизатора с 128 по 254 адрес, исключив адреса 192.168.6(7).1-192.168.6(7).127 для избежания конфликта адресов с базой DHCP-сервера на R13:
 ~~~
 R12(config)#ip dhcp excluded-address 192.168.6.254
-R12(config)#ip dhcp excluded-address 192.168.6.253
 R12(config)#ip dhcp excluded-address 192.168.6.1 192.168.6.127
 R12(config)#ip dhcp excluded-address 192.168.7.1 192.168.7.127
 R12(config)#ip dhcp excluded-address 192.168.7.254
-R12(config)#ip dhcp excluded-address 192.168.7.253
 R12(config)#ip dhcp pool VLAN-6
 R12(dhcp-config)#network 192.168.6.0 255.255.255.0
 R12(dhcp-config)#default-router 192.168.6.254
@@ -163,11 +161,11 @@ R13(config)#ip dhcp excluded-address 192.168.6.128 192.168.6.254
 R13(config)#ip dhcp excluded-address 192.168.7.128 192.168.7.254
 R13(config)#ip dhcp pool VLAN-6
 R13(dhcp-config)#network 192.168.6.0 255.255.255.0
-R13(dhcp-config)#default-router 192.168.6.253
+R13(dhcp-config)#default-router 192.168.6.254
 R13(dhcp-config)#domain-name moscow.net
 R13(config)#ip dhcp pool VLAN-7
 R13(dhcp-config)#network 192.168.7.0 255.255.255.0
-R13(dhcp-config)#default-router 192.168.7.253
+R13(dhcp-config)#default-router 192.168.7.254
 R13(dhcp-config)#domain-name moscow.net
 ~~~
 Необходимо добавить, что наши свичи SW4 и SW5 - L3 коммутаторы. Для того, чтобы ответ от DHCP на широковещательный запрос доходил до адресата, необходимо на интерфейсах коммутаторов, смотрящих в локальные сети, прописать адрес `ip helper-address` (адрес смотрящего на локальные сети интерфейса DHCP-сервера).
