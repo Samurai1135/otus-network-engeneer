@@ -146,7 +146,7 @@ ip as-path access-list 1 deny .*
 no ip http server
 no ip http secure-server
 ip nat pool NAT-MOSCOW 89.20.0.1 89.20.0.1 netmask 255.255.255.252
-ip nat source static tcp 10.128.254.19 23 89.20.0.10 2023
+ip nat inside source static tcp 10.128.30.2 23 89.20.0.10 2023
 ip nat inside source list 1 pool NAT-MOSCOW overload
 ip route 192.168.6.0 255.255.254.0 10.128.20.2
 ip route 192.168.6.0 255.255.254.0 10.128.21.2
