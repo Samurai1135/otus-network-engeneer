@@ -1,20 +1,19 @@
-VPN. GRE. DmVPN
+# VPN. GRE. DmVPN
 
-Цель:
+`Цель:`
 Настроить GRE между офисами Москва и С.-Петербург
 Настроить DMVPN между офисами Москва и Чокурдах, Лабытнанги
 
 
-Описание/Пошаговая инструкция выполнения домашнего задания:
-В этой самостоятельной работе мы ожидаем, что вы самостоятельно:
+# Задание:
 
-Настроите GRE между офисами Москва и С.-Петербург.
-Настроите DMVMN между Москва и Чокурдах, Лабытнанги.
-Все узлы в офисах в лабораторной работе должны иметь IP связность.
-
+- `Часть1.`Настроить GRE между офисами Москва и С.-Петербург.
+- `Часть2.`Настроить DMVMN между Москва и Чокурдах, Лабытнанги.
+- `Часть3.`Все узлы в офисах в лабораторной работе должны иметь IP связность.
 
 
-//R18#ping 89.20.0.15 source 89.30.0.18
+~~~
+R18#ping 89.20.0.15 source 89.30.0.18
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 89.20.0.15, timeout is 2 seconds:
 Packet sent with a source address of 89.30.0.18
@@ -27,23 +26,26 @@ Sending 5, 100-byte ICMP Echos to 89.20.0.14, timeout is 2 seconds:
 Packet sent with a source address of 89.30.0.18
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-//interface Tunnel2
+~~~
+~~~
+interface Tunnel2
  ip address 10.100.1.1 255.255.255.252
  ip mtu 1400
  ip tcp adjust-mss 1360
  tunnel source 89.20.0.14
  tunnel destination 89.30.0.18
 !
-
-//interface Tunnel1
+~~~
+~~~
+interface Tunnel1
  ip address 10.100.0.1 255.255.255.252
  ip mtu 1400
  ip tcp adjust-mss 1360
  tunnel source 89.20.0.15
  tunnel destination 89.30.0.18
-
- //interface Tunnel1
+~~~
+ ~~~
+interface Tunnel1
  ip address 10.100.0.2 255.255.255.252
  ip mtu 1400
  ip tcp adjust-mss 1360
@@ -58,9 +60,9 @@ interface Tunnel2
  tunnel destination 89.20.0.14
 !
 
-
-
-//R18#sh ip int brief
+~~~
+~~~
+R18#sh ip int brief
 Interface                  IP-Address      OK? Method Status                Protocol
 Ethernet0/0                10.128.2.1      YES NVRAM  up                    up
 Ethernet0/1                10.128.0.1      YES NVRAM  up                    up
@@ -70,8 +72,9 @@ Loopback0                  10.128.254.18   YES NVRAM  up                    up
 NVI0                       10.128.2.1      YES unset  up                    up
 Tunnel1                    10.100.0.2      YES NVRAM  up                    up
 Tunnel2                    10.100.1.2      YES NVRAM  up                    up
-
-//R18#ping 10.100.0.1
+~~~
+~~~
+R18#ping 10.100.0.1
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.100.0.1, timeout is 2 seconds:
 !!!!!
@@ -81,9 +84,9 @@ Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.100.1.1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-
-//Настроить DMVPN между офисами Москва и Чокурдах, Лабытнанги
+~~~
+~~~
+Настроить DMVPN между офисами Москва и Чокурдах, Лабытнанги
 
 R15#ping 10.0.3.2 source 89.20.0.15
 Type escape sequence to abort.
@@ -98,11 +101,13 @@ Sending 5, 100-byte ICMP Echos to 10.0.3.2, timeout is 2 seconds:
 Packet sent with a source address of 89.20.0.14
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-//ip route 89.20.0.14 255.255.255.255 10.0.1.1
+~~~
+~~~
+ip route 89.20.0.14 255.255.255.255 10.0.1.1
 ip route 89.20.0.15 255.255.255.255 10.0.0.1
-
-//R15#ping 10.0.1.1 source 89.20.0.15
+~~~
+~~~
+R15#ping 10.0.1.1 source 89.20.0.15
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.0.1.1, timeout is 2 seconds:
 Packet sent with a source address of 89.20.0.15
@@ -114,9 +119,9 @@ Sending 5, 100-byte ICMP Echos to 10.0.0.1, timeout is 2 seconds:
 Packet sent with a source address of 89.20.0.15
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-
-//Объединять в виртуальную сеть будем следующим образом (для роутеров указаны connected-интерфейсы и роли):
+~~~
+~~~
+Объединять в виртуальную сеть будем следующим образом (для роутеров указаны connected-интерфейсы и роли):
 
 Офис в Москве - HUB:
 
@@ -126,8 +131,9 @@ R15: 89.20.0.15
 Лабынтаги и Чокурдах - SPOKE:
 R27: 10.0.3.2
 R28: 10.0.0.1, 10.0.1.1
-
-//Настроим R15 с ролью HUB:
+~~~
+~~~
+Настроим R15 с ролью HUB:
 interface Tunnel10
  ip address 10.10.0.1 255.255.255.0
  no ip redirects
@@ -138,11 +144,11 @@ interface Tunnel10
  tunnel source 89.20.0.15
  tunnel mode gre multipoint
  tunnel key 200
-
+~~~
  tunnel key необходимо задать так как в Лабытнангах оба тунеля приземляются в один интерфейс.
 
 R14 настраиваем аналогично.
-
+~~~
 interface Tunnel11
  ip address 10.11.0.1 255.255.255.0
  no ip redirects
@@ -154,8 +160,9 @@ interface Tunnel11
  tunnel mode gre multipoint
  tunnel key 200
 !
-
+~~~
 Настроим R27 с ролью SPOKE:
+~~~
 interface Tunnel10
  ip address 10.10.0.5 255.255.255.0
  no ip redirects
@@ -182,18 +189,18 @@ interface Tunnel11
  tunnel mode gre multipoint
  tunnel key 200
 !
-
+~~~
 /// На обоих интерфейсах указывается один и тот же адрес источника.
 
 Проверяем:
-
+~~~
 R27#ping 10.10.0.1
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.10.0.1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-//
+~~~
+~~~
 interface Tunnel10
  ip address 10.10.0.3 255.255.255.0
  no ip redirects
@@ -224,8 +231,9 @@ interface Tunnel11
  tunnel mode gre multipoint
  tunnel key 200
 !
-
-//R15#sh ip nhrp
+~~~
+~~~
+R15#sh ip nhrp
 10.10.0.3/32 via 10.10.0.3
    Tunnel10 created 04:41:23, expire 00:08:58
    Type: dynamic, Flags: unique registered used nhop
@@ -234,8 +242,9 @@ interface Tunnel11
    Tunnel10 created 04:41:37, expire 01:59:38
    Type: dynamic, Flags: unique registered used nhop
    NBMA address: 10.0.3.2
-
-   //R15#ping 10.10.0.5
+~~~
+~~~
+R15#ping 10.10.0.5
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.10.0.5, timeout is 2 seconds:
 !!!!!
@@ -245,8 +254,9 @@ Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.10.0.3, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
-
-//R28#ping 10.11.0.1
+~~~
+~~~
+R28#ping 10.11.0.1
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.11.0.1, timeout is 2 seconds:
 !!!!!
@@ -261,5 +271,5 @@ Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 10.10.0.3, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
-
+~~~
 Аналогичный тоннель строится и на бордере R14
