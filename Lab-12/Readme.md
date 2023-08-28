@@ -114,11 +114,21 @@ R15(config)#ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023
 ~~~
 VPCS> ping 89.20.0.10 -p 2023 -P 6
 
-Connect   2023@89.20.0.10 RST returned
-Connect   2023@89.20.0.10 RST returned
-Connect   2023@89.20.0.10 RST returned
-Connect   2023@89.20.0.10 RST returned
-Connect   2023@89.20.0.10 RST returned
+Connect 2023@89.20.0.10 seq=1 ttl=248 time=2.122 ms
+SendData 2023@89.20.0.10 seq=1 ttl=248 time=1.069 ms
+Close 2023@89.20.0.10 timeout(9.559ms)
+Connect 2023@89.20.0.10 seq=2 ttl=248 time=4.300 ms
+SendData 2023@89.20.0.10 seq=2 ttl=248 time=1.077 ms
+Close 2023@89.20.0.10 timeout(9.557ms)
+Connect 2023@89.20.0.10 seq=3 ttl=248 time=4.289 ms
+SendData 2023@89.20.0.10 seq=3 ttl=248 time=1.075 ms
+Close 2023@89.20.0.10 timeout(10.618ms)
+Connect 2023@89.20.0.10 seq=4 ttl=248 time=4.287 ms
+SendData 2023@89.20.0.10 seq=4 ttl=248 time=1.069 ms
+Close 2023@89.20.0.10 timeout(10.599ms)
+Connect 2023@89.20.0.10 seq=5 ttl=248 time=4.301 ms
+SendData 2023@89.20.0.10 seq=5 ttl=248 time=1.070 ms
+Close 2023@89.20.0.10 timeout(6.366ms)
 ~~~
 ~~~
 R15#sh ip nat translations
