@@ -211,6 +211,7 @@ Sending 5, 100-byte ICMP Echos to 10.10.0.1, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/1 ms
 ~~~
+Настраиваем R28:
 ~~~
 interface Tunnel10
  ip address 10.10.0.3 255.255.255.0
@@ -243,6 +244,7 @@ interface Tunnel11
  tunnel key 200
 !
 ~~~
+И проверяем созданные тоннели:
 ~~~
 R15#sh ip nhrp
 10.10.0.3/32 via 10.10.0.3
@@ -283,4 +285,4 @@ Sending 5, 100-byte ICMP Echos to 10.10.0.3, timeout is 2 seconds:
 !!!!!
 Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
 ~~~
-Аналогичный тоннель строится и на бордере R14
+Аналогичный тоннель строится на бордере R14
