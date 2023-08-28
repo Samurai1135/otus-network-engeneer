@@ -1,5 +1,7 @@
 
 !
+! Last configuration change at 15:00:07 UTC Mon Aug 28 2023
+!
 version 15.4
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -77,28 +79,15 @@ interface Tunnel10
  ip mtu 1400
  ip nhrp map multicast 89.20.0.15
  ip nhrp map 10.10.0.1 89.20.0.15
+ ip nhrp map multicast 89.20.0.14
+ ip nhrp map 10.10.0.2 89.20.0.14
  ip nhrp network-id 200
  ip nhrp holdtime 600
- ip nhrp nhs 10.10.0.1
+ ip nhrp nhs 10.10.0.1 priority 1
+ ip nhrp nhs 10.10.0.2 priority 2
  ip nhrp shortcut
  ip tcp adjust-mss 1360
  tunnel source Ethernet0/0
- tunnel mode gre multipoint
- tunnel key 200
-!
-interface Tunnel11
- no shutdown
- ip address 10.11.0.3 255.255.255.0
- no ip redirects
- ip mtu 1400
- ip nhrp map multicast 89.20.0.14
- ip nhrp map 10.11.0.1 89.20.0.14
- ip nhrp network-id 10
- ip nhrp holdtime 600
- ip nhrp nhs 10.11.0.1
- ip nhrp shortcut
- ip tcp adjust-mss 1360
- tunnel source Ethernet0/1
  tunnel mode gre multipoint
  tunnel key 200
 !
