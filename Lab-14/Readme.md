@@ -17,7 +17,7 @@ IPSec over DmVPN
 На R18 подняты Tunnel1 и Tunnel12. Будем настраивать IPSec на них.
 
 R15:
-
+~~~
 crypto isakmp policy 10
  encr aes
  authentication pre-share
@@ -39,7 +39,7 @@ interface Tunnel 1
  tunnel protection ipsec profile PROTECT-GRE
  exit
 exit
-
+~~~
 Делаем аналогичную настройку на R18 с указанием точки подключения R15.
 Так же настраиваем шифрование для Tunnel2
 
