@@ -175,10 +175,9 @@ R28(ca-trustpoint)#exit
 ~~~
 Запросить сертификат CA и проверить его, запросить сертификат для себя:
 ~~~
-R28(config)#crypto pki authenticate VPN
-Certificate has the following attributes:
-       Fingerprint MD5: 282EA3CC AE4FE6E2 A1E9C0D0 C679758A
-      Fingerprint SHA1: 36A18CDD 11712E02 352B17FB 33069A85 88EE8501
+R28(config)#
+*Oct  5 09:55:11.213: CRYPTO_PKI:  Certificate Request Fingerprint MD5: 542D9F74 8737A93E 6F52B6D3 790322F3
+*Oct  5 09:55:11.213: CRYPTO_PKI:  Certificate Request Fingerprint SHA1: 12A94DF1 A495B4BE 7C3C3D53 CD4D27BF 562355AF
 
 % Do you accept this certificate? [yes/no]: yes
 Trustpoint CA certificate accepted.
