@@ -1,0 +1,219 @@
+        
+!
+! Last configuration change at 12:43:57 UTC Fri Oct 6 2023
+! NVRAM config last updated at 12:55:02 UTC Fri Oct 6 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R15
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 10.128.254.15 255.255.255.255
+ ip ospf 1 area 0
+!
+interface Tunnel1
+ no shutdown
+ ip address 10.100.0.1 255.255.255.252
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ keepalive 5 10
+ tunnel source 89.20.0.15
+ tunnel destination 89.30.0.18
+!
+interface Tunnel10
+ no shutdown
+ ip address 10.10.0.1 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 10
+ ip nhrp registration no-unique
+ ip tcp adjust-mss 1360
+ keepalive 5 10
+ tunnel source 89.20.0.15
+ tunnel mode gre multipoint
+ tunnel key 201
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 10.128.23.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 10
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 10.128.22.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 10
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 89.20.0.15 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 10.128.31.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf 1 area 102
+!
+interface Ethernet1/0
+ no shutdown
+ ip address 10.128.150.2 255.255.255.252
+ ip ospf 1 area 0
+!
+interface Ethernet1/1
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet1/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 10.128.254.15
+ area 102 filter-list prefix Block101 in
+ passive-interface default
+ no passive-interface Ethernet0/0
+ no passive-interface Ethernet0/1
+ no passive-interface Ethernet0/3
+ no passive-interface Ethernet1/0
+ default-information originate
+!
+router bgp 1001
+ bgp log-neighbor-changes
+ bgp default local-preference 200
+ neighbor 10.128.150.1 remote-as 1001
+ neighbor 10.128.254.14 remote-as 1001
+ neighbor 10.128.254.14 update-source Loopback0
+ neighbor 89.20.0.25 remote-as 301
+ !
+ address-family ipv4
+  network 10.128.254.15 mask 255.255.255.255
+  network 89.20.0.0 mask 255.255.255.0
+  neighbor 10.128.150.1 activate
+  neighbor 10.128.150.1 next-hop-self
+  neighbor 10.128.254.14 activate
+  neighbor 10.128.254.14 next-hop-self
+  neighbor 89.20.0.25 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 permit ^$
+ip as-path access-list 1 deny .*
+ip as-path access-list 2 permit _2042$
+ip as-path access-list 2 deny .*
+!
+no ip http server
+no ip http secure-server
+ip nat pool NAT-MOSCOW1 89.20.0.1 89.20.0.1 netmask 255.255.255.252
+ip nat pool NAT-MOSCOW 89.20.0.15 89.20.0.15 netmask 255.255.255.0
+ip nat source static tcp 10.128.30.2 23 89.20.0.10 2023 extendable
+ip nat inside source list 1 pool NAT-MOSCOW overload
+ip nat inside source static 10.128.31.2 89.20.0.5
+ip route 0.0.0.0 0.0.0.0 89.20.0.25
+ip route 89.20.1.14 255.255.255.255 10.128.150.1
+ip route 192.168.2.0 255.255.255.0 10.10.0.5
+ip route 192.168.3.0 255.255.255.0 10.10.0.5
+ip route 192.168.6.0 255.255.254.0 10.128.23.2
+ip route 192.168.6.0 255.255.254.0 10.128.22.2
+!
+!
+ip prefix-list Block101 seq 5 deny 10.128.30.0/30
+ip prefix-list Block101 seq 100 permit 0.0.0.0/0 le 32
+!
+!
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 10.128.25.1
+ntp server 10.128.26.1
+!
+end
+
+    
