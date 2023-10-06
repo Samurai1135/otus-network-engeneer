@@ -28,6 +28,6 @@
 > [Lab-10](https://github.com/Samurai1135/otus-network-engeneer/tree/8cc3d508abd7b323d364e4eeb2d5662830135ef7/Lab-10) - iBGP  
 > [Lab-11](https://github.com/Samurai1135/otus-network-engeneer/tree/32c81244e068990e499dffea703ce7d502d64a03/Lab-11) - BGP.Фильтрация  
 > [Lab-12](https://github.com/Samurai1135/otus-network-engeneer/tree/f8cb593ffc70c9c4f9d34b4e2d52819d975ea7cb/Lab-12) - NAT. DHCP. NTP  
-> [Lab-13](https://github.com/Samurai1135/otus-network-engeneer/tree/84095ffe73ca222158509307257b2db1a0a6ba0b/Lab-13) - VPN.GRE.DmVPN
-> [Lab-14](https://github.com/Samurai1135/otus-network-engeneer/tree/0f55f4c22e1fcd19d90e264aad677e1e261406be/Lab-14) - 
+> [Lab-13](https://github.com/Samurai1135/otus-network-engeneer/tree/84095ffe73ca222158509307257b2db1a0a6ba0b/Lab-13) - VPN.GRE.DmVPN  
+> [Lab-14](https://github.com/Samurai1135/otus-network-engeneer/tree/0f55f4c22e1fcd19d90e264aad677e1e261406be/Lab-14) - IPSec over DmVPN
  
