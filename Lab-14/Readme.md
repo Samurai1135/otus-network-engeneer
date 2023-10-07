@@ -135,7 +135,7 @@ Protection suite of priority 10
 `Параметры сертификатов:`
 ~~~
 subject-name CN=R15,OU=Moscow,O=moscow.net,C=RU
-subject-name CN=R27,OU=Labintagi,O=moscow.net,C=RU
+subject-name CN=R27,OU=Labytnangi,O=moscow.net,C=RU
 subject-name CN=R28,OU=Chokhurdakh,O=moscow.net,C=RU
 ~~~
 
@@ -247,7 +247,7 @@ CA Certificate
 ## Настройка IPSec
 В целом далее настройки IPSec и применение профиля аналогичны описанным выше, но тип аутентификации меняется с authentication pre-share на authentication rsa-sig.
 
-После применения настроек и выписывания сертификатов между (для примера R28 и R15) видно, что пиры теперь выглядят по другому:  
+После применения настроек и выписывания сертификатов между (для примера R28 и R14) видно, что пиры теперь выглядят по другому:  
 ~~~
 R14#sh crypto isakmp peers
 Peer: 10.0.1.2 Port: 500 Local: 89.20.1.14
