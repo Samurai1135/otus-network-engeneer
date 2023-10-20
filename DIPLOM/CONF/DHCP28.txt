@@ -1,0 +1,159 @@
+
+!
+! Last configuration change at 09:17:44 UTC Wed Oct 18 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname DHCP
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.2.254
+ip dhcp excluded-address 192.168.2.253
+ip dhcp excluded-address 192.168.4.253
+ip dhcp excluded-address 192.168.4.254
+ip dhcp excluded-address 192.168.5.253
+ip dhcp excluded-address 192.168.5.254
+ip dhcp excluded-address 192.168.6.253
+ip dhcp excluded-address 192.168.6.254
+ip dhcp excluded-address 192.168.200.1 192.168.200.3
+!
+ip dhcp pool VLAN2
+ network 192.168.2.0 255.255.255.0
+ domain-name Office.local
+ default-router 192.168.2.254 
+ dns-server 192.168.200.2 
+!
+ip dhcp pool VLAN3
+ network 192.168.3.0 255.255.255.0
+ default-router 192.168.3.254 
+ domain-name Office.local
+ dns-server 192.168.200.2 
+!
+ip dhcp pool VLAN4
+ network 192.168.4.0 255.255.255.0
+ domain-name Office.local
+ default-router 192.168.4.254 
+ dns-server 192.168.200.2 
+!
+ip dhcp pool VLAN5
+ network 192.168.5.0 255.255.255.0
+ default-router 192.168.5.254 
+ domain-name Office.local
+ dns-server 192.168.200.2 
+!
+ip dhcp pool VLAN6
+ network 192.168.6.0 255.255.255.0
+ domain-name Office.local
+ default-router 192.168.6.254 
+ dns-server 192.168.200.2 
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.28 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 172.17.0.17 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 172.17.1.17 255.255.255.252
+ ip ospf 1 area 10
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router ospf 1
+ router-id 15.15.15.15
+ network 172.17.0.16 0.0.0.3 area 10
+ network 172.17.1.16 0.0.0.3 area 10
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

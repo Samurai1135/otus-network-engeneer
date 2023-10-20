@@ -1,0 +1,2 @@
+set pcname VPCS
+ip 8.8.8.8 8.8.8.254 24

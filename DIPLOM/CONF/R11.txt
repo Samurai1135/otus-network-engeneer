@@ -1,0 +1,145 @@
+
+!
+! Last configuration change at 10:49:17 UTC Wed Oct 18 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R11
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.11 255.255.255.255
+ ip router isis 
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 22.19.51.2 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 22.19.53.2 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 31.18.224.1 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 50.2222.0000.0000.0011.00
+!
+router bgp 50
+ bgp log-neighbor-changes
+ neighbor 22.19.51.1 remote-as 50
+ neighbor 22.19.53.1 remote-as 50
+ neighbor 31.18.224.2 remote-as 77
+ neighbor 192.168.254.9 remote-as 50
+ neighbor 192.168.254.9 update-source Loopback0
+ neighbor 192.168.254.10 remote-as 50
+ neighbor 192.168.254.10 update-source Loopback0
+ neighbor 192.168.254.14 remote-as 50
+ neighbor 192.168.254.14 update-source Loopback0
+ !
+ address-family ipv4
+  network 31.18.224.0 mask 255.255.255.252
+  neighbor 22.19.51.1 activate
+  neighbor 22.19.51.1 route-reflector-client
+  neighbor 22.19.53.1 activate
+  neighbor 22.19.53.1 route-reflector-client
+  neighbor 31.18.224.2 activate
+  neighbor 192.168.254.9 activate
+  neighbor 192.168.254.9 route-reflector-client
+  neighbor 192.168.254.10 activate
+  neighbor 192.168.254.10 route-reflector-client
+  neighbor 192.168.254.14 activate
+  neighbor 192.168.254.14 route-reflector-client
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

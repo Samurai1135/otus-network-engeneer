@@ -1,0 +1,129 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R9
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.9 255.255.255.255
+ ip router isis 
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 22.19.52.1 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 22.19.50.1 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/2
+ no shutdown
+ no ip address
+ shutdown
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 50.2222.0000.0000.0009.00
+!
+router bgp 50
+ bgp log-neighbor-changes
+ neighbor 22.19.50.2 remote-as 50
+ neighbor 22.19.52.2 remote-as 50
+ neighbor 192.168.254.10 remote-as 50
+ neighbor 192.168.254.10 update-source Loopback0
+ neighbor 192.168.254.11 remote-as 50
+ neighbor 192.168.254.11 update-source Loopback0
+ neighbor 192.168.254.11 next-hop-self
+ neighbor 192.168.254.14 remote-as 50
+ neighbor 192.168.254.14 update-source Loopback0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

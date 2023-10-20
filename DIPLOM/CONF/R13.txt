@@ -1,0 +1,141 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R13
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.13 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 72.54.15.1 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 72.54.18.2 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 200.12.56.1 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 60.3333.0000.0000.0013.00
+!
+router bgp 60
+ bgp router-id 192.168.254.13
+ bgp log-neighbor-changes
+ neighbor 72.54.15.2 remote-as 60
+ neighbor 72.54.18.1 remote-as 60
+ neighbor 192.168.254.15 remote-as 60
+ neighbor 192.168.254.15 update-source Loopback0
+ neighbor 192.168.254.23 remote-as 60
+ neighbor 192.168.254.23 update-source Loopback0
+ neighbor 192.168.254.24 remote-as 60
+ neighbor 192.168.254.24 update-source Loopback0
+ neighbor 200.12.56.2 remote-as 77
+ !
+ address-family ipv4
+  network 200.12.56.0 mask 255.255.255.252
+  neighbor 72.54.15.2 activate
+  neighbor 72.54.18.1 activate
+  neighbor 192.168.254.15 activate
+  neighbor 192.168.254.15 route-reflector-client
+  neighbor 192.168.254.23 activate
+  neighbor 192.168.254.23 route-reflector-client
+  neighbor 192.168.254.24 activate
+  neighbor 192.168.254.24 route-reflector-client
+  neighbor 200.12.56.2 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

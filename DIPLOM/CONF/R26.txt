@@ -1,0 +1,118 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R26
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 8.8.8.254 255.255.255.0
+!
+interface Ethernet0/1
+ no shutdown
+ no ip address
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.15.15.1 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 82.15.8.1 255.255.255.252
+!
+router bgp 70
+ bgp log-neighbor-changes
+ neighbor 10.15.15.2 remote-as 50
+ neighbor 82.15.8.2 remote-as 60
+ !
+ address-family ipv4
+  network 8.8.0.0 mask 255.255.0.0
+  neighbor 10.15.15.2 activate
+  neighbor 82.15.8.2 activate
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 22.19.0.0 255.255.0.0 10.15.15.2
+ip route 72.54.0.0 255.255.0.0 82.15.8.2
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end

@@ -1,0 +1,228 @@
+
+!
+! Last configuration change at 12:43:10 UTC Wed Oct 18 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service compress-config
+!
+hostname SW18
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$vPRn$7Cp9O1HLAJa05icvDcSkc/
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.18 255.255.255.255
+!
+interface Port-channel1
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/0
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface Ethernet0/1
+ no shutdown
+ no switchport
+ ip address 172.16.0.2 255.255.255.252
+ ip ospf hello-interval 2
+ ip ospf priority 10
+ ip ospf 1 area 10
+ ip ospf cost 200
+ duplex auto
+!
+interface Ethernet0/2
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/3
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/0
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/1
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet1/2
+ no shutdown
+ no switchport
+ ip address 172.16.3.2 255.255.255.252
+ ip ospf hello-interval 2
+ ip ospf priority 50
+ ip ospf 1 area 10
+ ip ospf cost 20
+ duplex auto
+!
+interface Ethernet1/3
+ no shutdown
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode on
+!
+interface Ethernet2/0
+ no shutdown
+ no switchport
+ ip address 172.17.1.18 255.255.255.252
+ ip ospf priority 100
+ ip ospf 1 area 10
+ duplex auto
+!
+interface Ethernet2/1
+ no shutdown
+ switchport access vlan 254
+ switchport trunk allowed vlan 2-6,254
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet2/2
+ no shutdown
+!
+interface Ethernet2/3
+ no shutdown
+!
+interface Vlan2
+ no shutdown
+ ip address 192.168.2.253 255.255.255.0
+ ip helper-address 172.16.1.1
+ ip helper-address 172.16.3.1
+ ip helper-address 172.17.1.17
+ vrrp 2 ip 192.168.2.254
+ no vrrp 2 preempt
+!
+interface Vlan3
+ no shutdown
+ ip address 192.168.3.253 255.255.255.0
+ ip helper-address 172.16.1.1
+ ip helper-address 172.16.3.1
+ ip helper-address 172.17.1.17
+ vrrp 3 ip 192.168.3.254
+ no vrrp 3 preempt
+!
+interface Vlan4
+ no shutdown
+ ip address 192.168.4.253 255.255.255.0
+ ip helper-address 172.16.1.1
+ ip helper-address 172.16.3.1
+ ip helper-address 172.17.1.17
+ vrrp 4 ip 192.168.4.254
+ no vrrp 4 preempt
+!
+interface Vlan5
+ no shutdown
+ ip address 192.168.5.253 255.255.255.0
+ ip helper-address 172.16.1.1
+ ip helper-address 172.16.3.1
+ ip helper-address 172.17.1.17
+ vrrp 5 ip 192.168.5.254
+ no vrrp 5 preempt
+!
+interface Vlan6
+ no shutdown
+ ip address 192.168.6.253 255.255.255.0
+ ip helper-address 172.16.1.1
+ ip helper-address 172.16.3.1
+ ip helper-address 172.17.1.17
+ vrrp 6 ip 192.168.6.254
+ no vrrp 6 preempt
+!
+interface Vlan254
+ no shutdown
+ ip address 192.168.200.253 255.255.255.0
+ ip helper-address 172.17.1.17
+ ip helper-address 172.17.0.17
+ vrrp 254 ip 192.168.200.254
+ no vrrp 254 preempt
+!
+router ospf 1
+ router-id 4.4.4.4
+ network 172.16.0.0 0.0.0.3 area 10
+ network 172.16.3.0 0.0.0.3 area 10
+ network 172.17.1.16 0.0.0.3 area 10
+ neighbor 172.16.3.1
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd  Authorised A
+!
+line con 0
+ password 7 05080F1C2243
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 02050D480809
+ login
+ transport input none
+!
+ntp update-calendar
+ntp server 192.168.254.16
+ntp server 192.168.254.12
+!
+end

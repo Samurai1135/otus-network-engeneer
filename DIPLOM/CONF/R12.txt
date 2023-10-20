@@ -1,0 +1,197 @@
+
+!
+! Last configuration change at 12:40:20 UTC Wed Oct 18 2023
+! NVRAM config last updated at 12:46:16 UTC Wed Oct 18 2023
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R12
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$tYur$E1scrPbu0Xh1fhxtoCqUD1
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 192.168.2.254
+ip dhcp excluded-address 192.168.3.254
+ip dhcp excluded-address 192.168.4.254
+ip dhcp excluded-address 192.168.5.254
+ip dhcp excluded-address 192.168.6.254
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+track 1 ip sla 1 reachability
+!
+track 2 ip sla 2 reachability
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.12 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 172.16.2.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip ospf hello-interval 2
+ ip ospf 1 area 0
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 172.16.1.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip policy route-map CHANGE
+ ip ospf hello-interval 2
+ ip ospf priority 10
+ ip ospf 1 area 10
+ ip ospf cost 10
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 31.18.224.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+!
+interface Ethernet0/3
+ no shutdown
+ ip address 172.16.3.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+ ip policy route-map CHANGE
+ ip ospf hello-interval 2
+ ip ospf priority 50
+ ip ospf 1 area 10
+ ip ospf cost 50
+!
+!
+router eigrp 1
+ network 172.16.1.0 0.0.0.3
+ network 172.16.2.0 0.0.0.3
+ network 172.16.3.0 0.0.0.3
+ network 192.168.254.12 0.0.0.0
+!
+router ospf 1
+ router-id 1.1.1.1
+ network 172.16.0.0 0.0.0.3 area 10
+ network 172.16.1.0 0.0.0.3 area 10
+ network 172.16.2.0 0.0.0.3 area 0
+ network 172.16.3.0 0.0.0.3 area 10
+ network 172.16.4.0 0.0.0.3 area 10
+ network 172.17.0.16 0.0.0.3 area 10
+ network 172.17.1.16 0.0.0.3 area 10
+ default-information originate
+!
+router bgp 77
+ bgp log-neighbor-changes
+ bgp default local-preference 200
+ neighbor 31.18.224.1 remote-as 50
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool NAT-OFFICE 31.18.224.2 31.18.224.2 netmask 255.255.255.252
+ip nat inside source list 1 pool NAT-OFFICE overload
+ip nat inside source list 2 pool NAT-OFFICE overload
+ip route 0.0.0.0 0.0.0.0 31.18.224.1
+ip route 31.18.224.0 255.255.255.248 Null0
+ip route 192.168.0.0 255.255.0.0 172.16.1.2
+ip route 192.168.0.0 255.255.0.0 172.16.3.2
+!
+ip access-list extended VPC
+ permit ip 192.168.0.0 0.0.255.255 any
+!
+ip sla 1
+ icmp-echo 31.18.224.1 source-ip 192.168.254.12
+ frequency 5
+ip sla schedule 1 life forever start-time now
+ip sla 2
+ icmp-echo 172.16.2.2 source-ip 192.168.254.12
+ frequency 5
+ip sla schedule 2 life forever start-time now
+!
+route-map CHANGE permit 10
+ match ip address VPC
+ set ip next-hop verify-availability 31.18.224.1 10 track 1
+ set ip next-hop verify-availability 172.16.2.2 20 track 2
+ set ip next-hop 31.18.224.1
+!
+!
+access-list 2 deny   192.168.200.3
+access-list 2 permit 192.168.0.0 0.0.255.255
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+banner motd  Authorised A
+!
+line con 0
+ password 7 0822455D0A16
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ password 7 05080F1C2243
+ login
+ transport input none
+!
+ntp master 1
+!
+end

@@ -1,0 +1,136 @@
+
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R10
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 192.168.254.10 255.255.255.255
+ ip router isis 
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 22.19.52.2 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 22.19.53.1 255.255.255.252
+ ip router isis 
+!
+interface Ethernet0/2
+ no shutdown
+ ip address 10.15.15.2 255.255.255.252
+!
+interface Ethernet0/3
+ no shutdown
+ no ip address
+ shutdown
+!
+router isis
+ net 50.2222.0000.0000.0010.00
+!
+router bgp 50
+ bgp log-neighbor-changes
+ neighbor 10.15.15.1 remote-as 70
+ neighbor 22.19.52.1 remote-as 50
+ neighbor 22.19.53.2 remote-as 50
+ neighbor 192.168.254.11 remote-as 50
+ neighbor 192.168.254.11 update-source Loopback0
+ !
+ address-family ipv4
+  network 8.8.0.0 mask 255.255.0.0
+  network 10.15.15.0 mask 255.255.255.252
+  neighbor 10.15.15.1 activate
+  neighbor 22.19.52.1 activate
+  neighbor 22.19.53.2 activate
+  neighbor 22.19.53.2 next-hop-self
+  neighbor 192.168.254.11 activate
+  neighbor 192.168.254.11 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 8.8.0.0 255.255.0.0 10.15.15.1
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
